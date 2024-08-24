@@ -8,7 +8,7 @@
 */
 
 //=-=-=-=-=-=-=-=-=-=-=[Function's]=-=-=-=-=-=-=-=-=-=-=//
-getFormatPasswordTextdraw(const password[]) {
+GetFormatPasswordTextdraw(const password[]) {
 
     new
         string[13],

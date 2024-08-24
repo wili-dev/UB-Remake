@@ -1,7 +1,6 @@
 //=-=-=-=-=-=-=-=-=[Include's]=-=-=-=-=-=-=-=-=//
 #include <YSI_Coding\y_hooks>
 
-
 //=-=-=-=-=-=-=-=-=[Hook's]=-=-=-=-=-=-=-=-=-=-//
 hook OnGameModeInit() {
 

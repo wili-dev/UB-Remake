@@ -1,10 +1,16 @@
 //=-=-=-=-=-=-=-=-=-=-=[Include's]=-=-=-=-=-=-=-=-=-=-=//
 #include <open.mp>
+#include <crashdetect>
+#include <a_mysql>
 #include <sscanf2>
 #include <streamer>
 #include <samp_bcrypt>
 
-#include <crashdetect>
+#include <YSI_Core\y_utils>
+#include <YSI_Coding\y_timers>
+#include <YSI_Visual\y_dialog>
+#include <YSI_Visual\y_commands>
+#include <YSI_Extra\y_inline_mysql>
 
 //=-=-=-=-=-=-=-=-=-=-=[Module's]=-=-=-=-=-=-=-=-=-=-=//
 
@@ -14,7 +20,10 @@
 
 // # Utils #
 #include "../modules/utils/macros.pwn"
-#include "../modules/utils/funcs.pwn"
+#include "../modules/utils/datetime_utils.pwn"
+#include "../modules/utils/validators_utils.pwn"
+#include "../modules/utils/textdraw_utils.pwn"
+#include "../modules/utils/others_utils.pwn"
 
 // # Data #
 #include "../modules/data/connection.pwn"
@@ -39,7 +48,7 @@
 // # Objects #
 #include "../modules/objects/centralApartments/apartmentsLS.pwn"
 
-#include "../modules/objects/praia.pwn"
+//#include "../modules/objects/praia.pwn"
 
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=//

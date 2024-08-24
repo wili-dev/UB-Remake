@@ -4,9 +4,6 @@
 // DownIsOne = DownIsOne.y + 39.0
 // DownIsTwo = DownIsTwo.y + 32.0
 
-//=-=-=-=-=-=-=-=-=-=-=[Include's]=-=-=-=-=-=-=-=-=-=-=//
-#include <YSI_Coding\y_hooks>
-
 //=-=-=-=-=-=-=-=-=-=-=[Define's]=-=-=-=-=-=-=-=-=-=//
 #define TXD_NOTIFY_ALINE_POSY_START   (418.0)
 #define TXD_NOTIFY_TWOLINE_POSY_START (411.0)

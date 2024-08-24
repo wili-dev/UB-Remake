@@ -1,7 +1,5 @@
-//=-=-=-=-=-=-=-=-=[Include's]=-=-=-=-=-=-=-=-=//
-#define CGEN_MEMORY (50000)
+//=-=-=-=-=-=-=-=-=-=-=[Include's]-=-=-=-=-=-=-=-=-=-=//
 #include <YSI_Coding\y_hooks>
-
 
 //=-=-=-=-=-=-=-=-=[Hook's]=-=-=-=-=-=-=-=-=-=-//
 hook OnGameModeInit()

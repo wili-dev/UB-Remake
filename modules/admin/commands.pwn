@@ -1,6 +1,3 @@
-//=-=-=-=-=-=-=-=-=-=-=[Include's]=-=-=-=-=-=-=-=-=-=-=//
-#include <YSI_Visual\y_commands>
-
 //=-=-=-=-=-=-=-=-=-=-=[Command's]=-=-=-=-=-=-=-=-=-=-=//
 YCMD:heli(playerid, params[], help) 
 {

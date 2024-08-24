@@ -1,10 +1,5 @@
-//=-=-=-=-=-=-=-=-=-=-=[Include's]=-=-=-=-=-=-=-=-=-=-=//
+//=-=-=-=-=-=-=-=-=-=-=[Include's]-=-=-=-=-=-=-=-=-=-=//
 #include <YSI_Coding\y_hooks>
-#include <YSI_Coding\y_timers>
-#include <YSI_Visual\y_dialog>
-#include <YSI_Extra\y_inline_mysql>
-#include <YSI_Core\y_utils>
-
 
 //=-=-=-=-=-=-=-=-=-=-=[Variable's]=-=-=-=-=-=-=-=-=-=//
 new bool:gIsPlayerLogged[MAX_PLAYERS];
@@ -138,7 +133,7 @@ SQL_CreatePlayerAccount(playerid) {
     mysql_format(getMySQLHandle(), query, sizeof(query),
     "INSERT INTO accounts (username, password, email, birth_date, genre, register_date) VALUES('%s', '%e', '%e', '%s', '%s', '%s');",
     gPlayerAccountData[playerid][e_player_username], gPlayerAccountData[playerid][e_player_password], gPlayerAccountData[playerid][e_player_email],
-    gPlayerAccountData[playerid][e_player_birthdate], gPlayerAccountData[playerid][e_player_genre], ReturnDate());
+    gPlayerAccountData[playerid][e_player_birthdate], gPlayerAccountData[playerid][e_player_genre], GetFormattedDateTime());
 
     inline Response() {
 

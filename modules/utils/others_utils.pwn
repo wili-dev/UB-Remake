@@ -18,7 +18,7 @@ bool:YSI_StopTimerSafely(&Timer:timer) {
     return true;
 }
 
-clearPlayerChat(playerid, lines) {
+ClearPlayerChat(playerid, lines) {
 
     for (new i = 0; i < lines; i++) {
 

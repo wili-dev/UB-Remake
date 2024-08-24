@@ -1,7 +1,6 @@
 //=-=-=-=-=-=-=-=-=-=-=[Include's]=-=-=-=-=-=-=-=-=-=-=//
 #include <YSI_Coding\y_hooks>
 
-
 //=-=-=-=-=-=-=-=-=-=-=[Variable's]=-=-=-=-=-=-=-=-=-=//
 new Float:tempPlayerPosBoxMoveLoginSplash[MAX_PLAYERS];
 new Timer:tempPlayerTimerLoginSplash[MAX_PLAYERS];

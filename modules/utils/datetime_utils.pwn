@@ -8,7 +8,7 @@
 */
 
 //=-=-=-=-=-=-=-=-=-=-=[Function's]=-=-=-=-=-=-=-=-=-=-=//
-getFormattedDateTime() {
+GetFormattedDateTime() {
 
 	static
 	    date[30];
@@ -20,7 +20,7 @@ getFormattedDateTime() {
 	return date;
 }
 
-getNameMonth(monthid) {
+GetNameMonth(monthid) {
 
     new
         name[10];
