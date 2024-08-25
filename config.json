@@ -101,7 +101,7 @@
             "crashdetect"
         ],
         "main_scripts": [
-            "test"
+            "main"
         ],
         "side_scripts": []
     },

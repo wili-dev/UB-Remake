@@ -41,9 +41,11 @@
 #include "../modules/visual/shared/notifications.pwn"
 
 // # Visual #
-#include "../modules/visual/register.pwn"
-#include "../modules/visual/login.pwn"
-#include "../modules/visual/login_splash.pwn"
+#include "../modules/visual/register_account/register_data.pwn"
+#include "../modules/visual/register_account/register_email_code.pwn"
+
+#include "../modules/visual/login_account/login.pwn"
+#include "../modules/visual/login_account/login_splash.pwn"
 
 // # Objects #
 #include "../modules/objects/centralApartments/apartmentsLS.pwn"

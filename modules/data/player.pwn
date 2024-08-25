@@ -133,11 +133,13 @@ SQL_CreatePlayerAccount(playerid) {
     mysql_format(getMySQLHandle(), query, sizeof(query),
     "INSERT INTO accounts (username, password, email, birth_date, genre, register_date) VALUES('%s', '%e', '%e', '%s', '%s', '%s');",
     gPlayerAccountData[playerid][e_player_username], gPlayerAccountData[playerid][e_player_password], gPlayerAccountData[playerid][e_player_email],
-    gPlayerAccountData[playerid][e_player_birthdate], gPlayerAccountData[playerid][e_player_genre], GetFormattedDateTime());
+    gPlayerAccountData[playerid][e_player_birthdate], gPlayerAccountData[playerid][e_player_genre], GetDateTime());
 
     inline Response() {
 
+        if (cache_affected_rows() > 0) {
 
+        }
     }
 
     MySQL_TQueryInline(getMySQLHandle(), using inline Response, query);
@@ -182,7 +184,11 @@ GetPlayerNameEx(playerid) {
 }
 
 GetPlayerEmail(playerid) {
-    return gPlayerAccountData[playerid][e_player_email];
+
+    new
+        str[55];
+    strcat(str, gPlayerAccountData[playerid][e_player_email]);
+    return str;
 }
 
 GetPlayerBirthDate(playerid) {
@@ -420,7 +426,7 @@ ShowPlayerDialogRegisterEmail(playerid) {
 
         if (response) {
             
-            if (isnull(inputtext) || strlen(inputtext) > 50 || !IsValidEmail(inputtext))
+            if (isnull(inputtext) || strlen(inputtext) > 50)// || !IsValidEmail(inputtext))
                 return ShowPlayerDialogRegisterEmail(playerid);
 
             format(gPlayerAccountData[playerid][e_player_email], _, inputtext);
@@ -455,10 +461,20 @@ ShowPlayerDialogRegisterPassword(playerid, field_id) {
 
             if (isnull(inputtext) || strlen(inputtext) < 5 || strlen(inputtext) > 20 || field_id == 2 && strcmp(tempPlayerPassword[playerid], inputtext)) {
 
-                if (field_id == 1)
+                if (field_id == 1) {
+ 
                     Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_PASSWORD, "Ops...", "{FF6347}ERRO: Formato de senha invalido\n{FFFFFF}Digite sua senha abaixo\n\n{B366D9}OBS: {FFFFFF}Min 5, Max 20 caracteres", ">>", "<<");
-                else
+                }
+                else {
+
+                    if (!isnull(tempPlayerPasswordConfirm[playerid])) {
+                        
+                        tempPlayerPasswordConfirm[playerid][0] = '\0';
+                        VSL_UpdateTextdrawRegisterPasswordConfirm(playerid, "Confirme sua senha");
+                    }
+
                     Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_PASSWORD, "Ops...", "{FF6347}ERRO: As senhas nao coincidem\n{FFFFFF}Digite novamente sua senha", ">>", "<<");
+                }
                 return 1;
             }
 

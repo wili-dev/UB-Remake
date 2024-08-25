@@ -8,7 +8,7 @@
 */
 
 //=-=-=-=-=-=-=-=-=-=-=[Function's]=-=-=-=-=-=-=-=-=-=-=//
-GetFormattedDateTime() {
+GetDateTime() {
 
 	static
 	    date[30];
