@@ -505,3 +505,25 @@ ShowPlayerDialogRegisterPassword(playerid, field_id) {
         Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_PASSWORD, "Confirme sua senha", "{FFFFFF}Digite novamente sua senha", ">>", "<<");
     return 1;
 }
+
+ShowPlayerDialogRegisterEmailCode(playerid) {
+
+    inline Response(response, listitem, string:inputtext[]) {
+       
+        #pragma unused listitem, inputtext
+
+        if (response) {
+
+            if (isnull(inputtext) || strlen(inputtext) != 6)
+                return ShowPlayerDialogRegisterEmailCode(playerid);
+
+            VSL_UpdateTextdrawRegisterEmailCode(playerid, inputtext);
+            VSL_ShowTextdrawsRegisterEmailCode(playerid);
+        }
+        else
+            VSL_ShowTextdrawsRegisterEmailCode(playerid);
+    }
+
+    Dialog_ShowCallback(playerid, using inline Response, DIALOG_STYLE_INPUT, "Insira o codigo de confirmacao", "{FFFFFF}{FFFFFF}Verifique se voce recebeu um e-mail contendo um\ncodigo de 6 digitos.", ">>", "<<");
+    return 1;
+}

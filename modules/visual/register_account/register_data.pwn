@@ -263,7 +263,7 @@ VSL_CreateTextdrawsRegister(playerid) {
     PlayerTextDrawSetProportional(playerid, TxdRegisterButtonRegister[playerid][0], true);
     PlayerTextDrawSetSelectable(playerid, TxdRegisterButtonRegister[playerid][0], false);
 
-    TxdRegisterButtonRegister[playerid][1] = CreatePlayerTextDraw(playerid, 282.000000, 379.000000, "Continuar");
+    TxdRegisterButtonRegister[playerid][1] = CreatePlayerTextDraw(playerid, 285.000000, 379.000000, "Continuar");
     PlayerTextDrawFont(playerid, TxdRegisterButtonRegister[playerid][1], TEXT_DRAW_FONT_3);
     PlayerTextDrawLetterSize(playerid, TxdRegisterButtonRegister[playerid][1], 0.349999, 1.899999);
     PlayerTextDrawTextSize(playerid, TxdRegisterButtonRegister[playerid][1], 348.000000, 16.000000);

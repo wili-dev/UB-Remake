@@ -2,6 +2,8 @@
 #include <YSI_Coding\y_hooks>
 
 //=-=-=-=-=-=-=-=-=-=-=[Variable's]=-=-=-=-=-=-=-=-=-=//
+new bool:tempPlayerTxdRegisterEmailCodeButtonEnable[MAX_PLAYERS];
+
 new PlayerText:TxdRegisterCodeLayoutFieldEmail[MAX_PLAYERS];
 new PlayerText:TxdRegisterCodeLayoutFieldCode[MAX_PLAYERS];
 
@@ -12,6 +14,33 @@ new PlayerText:TxdRegisterCodeButtonRegister[MAX_PLAYERS][2];
 new PlayerText:TxdRegisterCodeButtonResendCode[MAX_PLAYERS];
 
 //=-=-=-=-=-=-=-=-=-=-=[Callback's]=-=-=-=-=-=-=-=-=-=-=//
+hook OnPlayerConnect(playerid) {
+
+    tempPlayerTxdRegisterEmailCodeButtonEnable[playerid] = false;
+    return 1;
+}
+
+hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) {
+
+    if (!IsPlayerLogged(playerid)) {
+
+        if (playertextid == TxdRegisterCodeTextCode[playerid]) {
+
+            VSL_HideTextdrawsRegisterEmailCode(playerid);
+            ShowPlayerDialogRegisterEmailCode(playerid);
+        }
+        else if (playertextid == TxdRegisterCodeButtonRegister[playerid][1]) {
+
+            SHARED_DestroyTextdrawLoginLogo(playerid);
+            VSL_DestroyTextdrawsRegisterEmailCode(playerid);
+
+            VSL_CreateTextdrawsCharacterModes(playerid);
+            VSL_ShowTextdrawsModeCharacterModes(playerid);
+        }
+    }
+    return 1;
+}
+
 
 //=-=-=-=-=-=-=-=-=-=-=[Function's]=-=-=-=-=-=-=-=-=-=-=//
 VSL_CreateTextdrawsRegisterEmailCode(playerid) {
@@ -108,7 +137,7 @@ VSL_CreateTextdrawsRegisterEmailCode(playerid) {
 
 
 
-    TxdRegisterCodeButtonResendCode[playerid] = CreatePlayerTextDraw(playerid, 313.000000, 342.000000, "Reenviar Codigo");
+    TxdRegisterCodeButtonResendCode[playerid] = CreatePlayerTextDraw(playerid, 316.000000, 342.000000, "Reenviar Codigo");
     PlayerTextDrawFont(playerid, TxdRegisterCodeButtonResendCode[playerid], TEXT_DRAW_FONT_2);
     PlayerTextDrawLetterSize(playerid, TxdRegisterCodeButtonResendCode[playerid], 0.162496, 1.199995);
     PlayerTextDrawTextSize(playerid, TxdRegisterCodeButtonResendCode[playerid], 11.000000, 60.000000);
@@ -134,10 +163,77 @@ VSL_ShowTextdrawsRegisterEmailCode(playerid) {
 
     PlayerTextDrawShow(playerid, TxdRegisterCodeTextCode[playerid]);
 
+
+    if (tempPlayerTxdRegisterEmailCodeButtonEnable[playerid]) {
+
+        PlayerTextDrawBoxColour(playerid, TxdRegisterCodeButtonRegister[playerid][0], 1747094527);
+
+        PlayerTextDrawColour(playerid, TxdRegisterCodeButtonRegister[playerid][1], -1);
+        PlayerTextDrawSetSelectable(playerid, TxdRegisterCodeButtonRegister[playerid][1], true);
+    }
+    else {
+
+        PlayerTextDrawBoxColour(playerid, TxdRegisterCodeButtonRegister[playerid][0], 505290495);
+
+        PlayerTextDrawColour(playerid, TxdRegisterCodeButtonRegister[playerid][1], 1347440895);
+        PlayerTextDrawSetSelectable(playerid, TxdRegisterCodeButtonRegister[playerid][1], false);
+    }
+
     for (new txd = 0; txd < 2; txd++) {
         PlayerTextDrawShow(playerid, TxdRegisterCodeButtonRegister[playerid][txd]);
     }
+    return 1;
+}
 
-    PlayerTextDrawShow(playerid, TxdRegisterCodeButtonResendCode[playerid]);
+VSL_HideTextdrawsRegisterEmailCode(playerid) {
+
+    PlayerTextDrawHide(playerid, TxdRegisterCodeLayoutFieldEmail[playerid]);
+    PlayerTextDrawHide(playerid, TxdRegisterCodeLayoutFieldCode[playerid]);
+
+    PlayerTextDrawSetString(playerid, TxdRegisterCodeTextEmail[playerid], GetPlayerEmail(playerid));
+    PlayerTextDrawHide(playerid, TxdRegisterCodeTextEmail[playerid]);
+
+    PlayerTextDrawHide(playerid, TxdRegisterCodeTextCode[playerid]);
+
+    for (new txd = 0; txd < 2; txd++) {
+        PlayerTextDrawHide(playerid, TxdRegisterCodeButtonRegister[playerid][txd]);
+    }
+
+    PlayerTextDrawHide(playerid, TxdRegisterCodeButtonResendCode[playerid]);
+    return 1;
+}
+
+VSL_DestroyTextdrawsRegisterEmailCode(playerid) {
+
+    PlayerTextDrawDestroy(playerid, TxdRegisterCodeLayoutFieldEmail[playerid]);
+    TxdRegisterCodeLayoutFieldEmail[playerid] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+
+    PlayerTextDrawDestroy(playerid, TxdRegisterCodeLayoutFieldCode[playerid]);
+    TxdRegisterCodeLayoutFieldCode[playerid] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+
+    PlayerTextDrawDestroy(playerid, TxdRegisterCodeTextEmail[playerid]);
+    TxdRegisterCodeTextEmail[playerid] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+
+    PlayerTextDrawDestroy(playerid, TxdRegisterCodeTextCode[playerid]);
+    TxdRegisterCodeTextCode[playerid] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+
+    for (new txd = 0; txd < 2; txd++) {
+
+        PlayerTextDrawDestroy(playerid, TxdRegisterCodeButtonRegister[playerid][txd]);
+        TxdRegisterCodeButtonRegister[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+    }
+
+    PlayerTextDrawDestroy(playerid, TxdRegisterCodeButtonResendCode[playerid]);
+    TxdRegisterCodeButtonResendCode[playerid] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+
+    CancelSelectTextDraw(playerid);
+    return 1;
+}
+
+VSL_UpdateTextdrawRegisterEmailCode(playerid, const input_code[]) {
+
+    tempPlayerTxdRegisterEmailCodeButtonEnable[playerid] = strlen(input_code) > 0 ? true : false;
+
+    PlayerTextDrawSetString(playerid, TxdRegisterCodeTextCode[playerid], input_code);
     return 1;
 }
