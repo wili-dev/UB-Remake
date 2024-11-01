@@ -13,13 +13,50 @@ new PlayerText:TxdCreateCharacterModesLevel[MAX_PLAYERS][4];
 new PlayerText:TxdCreateCharacterModesExp[MAX_PLAYERS][4];
 new PlayerText:TxdCreateCharacterModesButtonNext[MAX_PLAYERS][2];
 
-//=-=-=-=-=-=-=-=-=-=-=[Function's]=-=-=-=-=-=-=-=-=-=-=//
+
+//=-=-=-=-=-=-=-=-=-=-=[Callback's]=-=-=-=-=-=-=-=-=-=-=//
 hook OnPlayerConnect(playerid) {
 
     _tempPlayerTxdCharacterModeIndex{playerid} = 0;
     return 1;
 }
 
+hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) {
+
+    if (!IsPlayerLogged(playerid)) {
+
+        if (playertextid == TxdCreateCharacterModesButtonNext[playerid][1]) {
+            
+        }
+        else {
+
+            for (new txd = 0; txd < 4; txd++) {
+
+                if (playertextid == TxdCreateCharacterModesBox[playerid][txd]) {
+
+                    if (!tempPlayerCharacterModeId{playerid}) {
+
+                        PlayerTextDrawBoxColour(playerid, TxdCreateCharacterModesButtonNext[playerid][0], 1747094527);
+                        PlayerTextDrawColour(playerid, TxdCreateCharacterModesButtonNext[playerid][1], -1);
+
+                        PlayerTextDrawSetSelectable(playerid, TxdCreateCharacterModesButtonNext[playerid][1], true);
+
+                        PlayerTextDrawShow(playerid, TxdCreateCharacterModesButtonNext[playerid][0]);
+                        PlayerTextDrawShow(playerid, TxdCreateCharacterModesButtonNext[playerid][1]);
+                    }
+
+                    VSL_UpdateTextdrawsBoxModeCharacterModes(playerid, txd);
+                    tempPlayerCharacterModeId{playerid} = txd + 1;
+                    break;
+                }
+            }
+        }
+    }
+    return 1;
+}
+
+
+//=-=-=-=-=-=-=-=-=-=-=[Function's]=-=-=-=-=-=-=-=-=-=-=//
 VSL_CreateTextdrawsCharacterModes(playerid) {
 
     TxdCreateCharacterModesLayout[playerid][0] = CreatePlayerTextDraw(playerid, 246.000000, 30.000000, "Escolha um modo");
@@ -80,9 +117,9 @@ VSL_CreateTextdrawsCharacterModes(playerid) {
 
 
     VSL_CreateTextdrawModeCharacterModes(playerid, "ld_tatt:11dice2", "Nada a Perder", "Voce meteu o louco e veio~n~la do fim do mundo para a~n~cidade grande.~n~~n~O que voce tem e R$200~n~reais no bolso e um sonho!", "LEVEL 1", "EXP: NORMAL");
-    VSL_CreateTextdrawModeCharacterModes(playerid, "ld_tatt:7mary", "Ninho Familiar", "Voce ainda mora com seus~n~pais, entao e melhor se~n~comportar ou podera ser~n~expulso.~n~~n~Pelo menos eles te deram~n~um veiculo usado que so faz~n~barulho para voce ir a faculdade.", "LEVEL 4", "EXP: -20% EM PAYDAY");
+    VSL_CreateTextdrawModeCharacterModes(playerid, "ld_tatt:7mary", "Ninho Familiar", "Voce ainda mora com seus~n~pais, entao e melhor se~n~comportar ou podera ser~n~expulso.~n~~n~Pelo menos eles te deram~n~um veiculo usado que so faz~n~barulho para voce ir a~n~faculdade.", "LEVEL 4", "EXP: -20% EM PAYDAY");
     VSL_CreateTextdrawModeCharacterModes(playerid, "ld_tatt:6clown", "Simplesmente Eu", "Voce alugou seu proprio~n~cantinho e tem um emprego~n~de meio periodo desde a~n~epoca de escola.~n~~n~Sua fiel lambreta te~n~acompanha, e lenta, mas~n~raramenta te deixa na mao.", "LEVEL 2", "EXP: -15% EM PAYDAY");
-    VSL_CreateTextdrawModeCharacterModes(playerid, "ld_tatt:12angel", "Terceira Idade", "Voce ja esta no final da vida~n~e se aposentou, sem muitas~n~obrigacoes. Tem um dinheirinho~n~guardado, mas gasta horrores com~n~remedios.~n~~n~Se apegou demais ao seu veiculo~n~para pensar em trocar por um novo.", "LEVEL 10", "EXP: NENHUM");
+    VSL_CreateTextdrawModeCharacterModes(playerid, "ld_tatt:12angel", "Terceira Idade", "Voce ja esta no final da vida~n~e se aposentou, sem muitas~n~obrigacoes. Tem um dinheiro~n~guardado, mas gasta~n~horrores com remedios.~n~~n~Se apegou demais ao seu~n~veiculo para pensar em trocar~n~por um novo.", "LEVEL 10", "EXP: NENHUM");
     return 1;
 }
 
@@ -202,5 +239,47 @@ VSL_ShowTextdrawsModeCharacterModes(playerid) {
     }
 
     SelectTextDraw(playerid, 0xFAFAFAFF);
+    return 1;
+}
+
+VSL_UpdateTextdrawsBoxModeCharacterModes(playerid, index) {
+
+    new
+        index_old = tempPlayerCharacterModeId{playerid} - 1;
+
+    if (tempPlayerCharacterModeId{playerid}) {
+
+        PlayerTextDrawColour(playerid, TxdCreateCharacterModesBox[playerid][index_old], -1);
+        PlayerTextDrawColour(playerid, TxdCreateCharacterModesSprite[playerid][index_old], -1);
+        PlayerTextDrawColour(playerid, TxdCreateCharacterModesName[playerid][index_old], 255);
+        PlayerTextDrawColour(playerid, TxdCreateCharacterModesDescription[playerid][index_old], 255);
+        PlayerTextDrawColour(playerid, TxdCreateCharacterModesLevel[playerid][index_old], 255);
+        PlayerTextDrawColour(playerid, TxdCreateCharacterModesExp[playerid][index_old], 255);
+
+        PlayerTextDrawSetSelectable(playerid, TxdCreateCharacterModesBox[playerid][index_old], true);
+        
+        PlayerTextDrawShow(playerid, TxdCreateCharacterModesSprite[playerid][index_old]);
+        PlayerTextDrawShow(playerid, TxdCreateCharacterModesName[playerid][index_old]);
+        PlayerTextDrawShow(playerid, TxdCreateCharacterModesDescription[playerid][index_old]);
+        PlayerTextDrawShow(playerid, TxdCreateCharacterModesLevel[playerid][index_old]);
+        PlayerTextDrawShow(playerid, TxdCreateCharacterModesExp[playerid][index_old]);
+        PlayerTextDrawShow(playerid, TxdCreateCharacterModesBox[playerid][index_old]);
+    }
+
+    PlayerTextDrawColour(playerid, TxdCreateCharacterModesBox[playerid][index], 1747094527);
+    PlayerTextDrawColour(playerid, TxdCreateCharacterModesSprite[playerid][index], 1747094527);
+    PlayerTextDrawColour(playerid, TxdCreateCharacterModesName[playerid][index], -1);
+    PlayerTextDrawColour(playerid, TxdCreateCharacterModesDescription[playerid][index], -1);
+    PlayerTextDrawColour(playerid, TxdCreateCharacterModesLevel[playerid][index], -1);
+    PlayerTextDrawColour(playerid, TxdCreateCharacterModesExp[playerid][index], -1);
+    
+    PlayerTextDrawSetSelectable(playerid, TxdCreateCharacterModesBox[playerid][index], false);
+
+    PlayerTextDrawShow(playerid, TxdCreateCharacterModesSprite[playerid][index]);
+    PlayerTextDrawShow(playerid, TxdCreateCharacterModesName[playerid][index]);
+    PlayerTextDrawShow(playerid, TxdCreateCharacterModesDescription[playerid][index]);
+    PlayerTextDrawShow(playerid, TxdCreateCharacterModesLevel[playerid][index]);
+    PlayerTextDrawShow(playerid, TxdCreateCharacterModesExp[playerid][index]);
+    PlayerTextDrawShow(playerid, TxdCreateCharacterModesBox[playerid][index]);
     return 1;
 }

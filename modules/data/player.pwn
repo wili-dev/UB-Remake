@@ -10,6 +10,7 @@ new tempPlayerBirthMonth[MAX_PLAYERS][3];
 new tempPlayerBirthYear[MAX_PLAYERS][5];
 new tempPlayerPassword[MAX_PLAYERS][21];
 new tempPlayerPasswordConfirm[MAX_PLAYERS][21];
+new tempPlayerCharacterModeId[MAX_PLAYERS char];
 
 enum e_player_adata {
 
@@ -43,8 +44,15 @@ hook OnPlayerRequestClass(playerid, classid) {
     ClearPlayerChat(playerid, 10);
     TogglePlayerSpectating(playerid, true);
 
-    VSL_CreateTextdrawsLoginSplash(playerid);
-    VSL_ShowTextdrawsLoginSplash(playerid);
+
+    SHARED_CreateTextdrawLoginBackground(playerid);
+    SHARED_ShowTextdrawLoginBackground(playerid);
+
+    VSL_CreateTextdrawsCharacterModes(playerid);
+    VSL_ShowTextdrawsModeCharacterModes(playerid);
+
+    // VSL_CreateTextdrawsLoginSplash(playerid);
+    // VSL_ShowTextdrawsLoginSplash(playerid);
 
     // if (!IsValidRoleplayName(GetPlayerNameEx(playerid))) {
 
@@ -159,6 +167,7 @@ ResetPlayerData(playerid) {
     tempPlayerBirthYear[playerid][0] = '\0';
     tempPlayerPassword[playerid][0] = '\0';
     tempPlayerPasswordConfirm[playerid][0] = '\0';
+    tempPlayerCharacterModeId{playerid} = 0;
 
     gPlayerAccountData[playerid][e_player_database_id] = 0;
     gPlayerAccountData[playerid][e_player_username] = '\0';
