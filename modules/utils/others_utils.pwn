@@ -26,3 +26,12 @@ ClearPlayerChat(playerid, lines) {
     }
     return 1;
 }
+
+
+public::OnTimerKickDelay(playerid) {
+    Kick(playerid);
+}
+
+KickDelay(playerid, time) {
+    SetTimerEx("OnTimerKickDelay", time, false, "i", playerid);
+}

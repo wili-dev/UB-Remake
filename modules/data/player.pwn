@@ -44,20 +44,8 @@ hook OnPlayerRequestClass(playerid, classid) {
     ClearPlayerChat(playerid, 10);
     TogglePlayerSpectating(playerid, true);
 
-
-    SHARED_CreateTextdrawLoginBackground(playerid);
-    SHARED_ShowTextdrawLoginBackground(playerid);
-
-    VSL_CreateTextdrawsCharacterModes(playerid);
-    VSL_ShowTextdrawsModeCharacterModes(playerid);
-
-    // VSL_CreateTextdrawsLoginSplash(playerid);
-    // VSL_ShowTextdrawsLoginSplash(playerid);
-
-    // if (!IsValidRoleplayName(GetPlayerNameEx(playerid))) {
-
-    //     return 0;
-    // }
+    VSL_CreateTextdrawsLoginSplash(playerid);
+    VSL_ShowTextdrawsLoginSplash(playerid);
     return 0;
 }
 
@@ -184,6 +172,25 @@ ResetPlayerData(playerid) {
     return 1;
 }
 
+CheckPlayerLogin(playerid) {
+
+    SHARED_CreateTextdrawLoginLogo(playerid);
+    SHARED_ShowTextdrawLoginLogo(playerid);
+
+    if (!IsValidRoleplayName(ReturnPlayerName(playerid))) {
+
+        ShowPlayerDialog(playerid, 0, DIALOG_STYLE_MSGBOX, "Ops...", "{FFFFFF}Parece que voce esta tentando acessar o servidor\ncom um nickname invalido.\n\nUtilize um nickname no seguinte formato: Nome_Sobrenome\nExemplo: Carlos_Jose, Ana_Maria.\n\nObs: Ambas letras inicias devem estar em maiusculo.", "X", "");
+        KickDelay(playerid, 1000);
+        return 0;
+    }
+
+    SQL_LoginCheckExistsAccount(playerid, ReturnPlayerName(playerid));
+    return 1;
+}
+
+
+
+//----------------------------------------------------//
 GetPlayerDatabaseID(playerid) {
     return gPlayerAccountData[playerid][e_player_database_id];
 }

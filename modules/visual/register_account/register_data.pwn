@@ -73,9 +73,6 @@ hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) {
 //=-=-=-=-=-=-=-=-=-=-=[Function's]=-=-=-=-=-=-=-=-=-=-=//
 VSL_CreateTextdrawsRegister(playerid) {
 
-    SHARED_CreateTextdrawLoginLogo(playerid);
-
-
     TxdRegisterLayoutFieldDateOfBirth[playerid] = CreatePlayerTextDraw(playerid, 314.000000, 202.000000, "_");
     PlayerTextDrawFont(playerid, TxdRegisterLayoutFieldDateOfBirth[playerid], TEXT_DRAW_FONT_1);
     PlayerTextDrawLetterSize(playerid, TxdRegisterLayoutFieldDateOfBirth[playerid], 0.600000, 2.000003);
@@ -280,8 +277,6 @@ VSL_CreateTextdrawsRegister(playerid) {
 }
 
 VSL_ShowTextdrawsRegister(playerid) {
-
-    SHARED_ShowTextdrawLoginLogo(playerid);
 
     PlayerTextDrawShow(playerid, TxdRegisterLayoutFieldDateOfBirth[playerid]);
     PlayerTextDrawShow(playerid, TxdRegisterLayoutFieldGender[playerid]);

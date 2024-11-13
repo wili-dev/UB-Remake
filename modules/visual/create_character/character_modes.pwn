@@ -26,7 +26,14 @@ hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) {
     if (!IsPlayerLogged(playerid)) {
 
         if (playertextid == TxdCreateCharacterModesButtonNext[playerid][1]) {
-            
+
+            SetPlayerLogged(playerid, true);
+            SetCharacterSpawned(playerid, true);
+
+            SHARED_DestroyTextdrawLoginBackground(playerid);
+            VSL_DestroyTextdrawsModeCharacterModes(playerid);
+            TogglePlayerSpectating(playerid, false);
+            SpawnPlayer(playerid);
         }
         else {
 
@@ -281,5 +288,37 @@ VSL_UpdateTextdrawsBoxModeCharacterModes(playerid, index) {
     PlayerTextDrawShow(playerid, TxdCreateCharacterModesLevel[playerid][index]);
     PlayerTextDrawShow(playerid, TxdCreateCharacterModesExp[playerid][index]);
     PlayerTextDrawShow(playerid, TxdCreateCharacterModesBox[playerid][index]);
+    return 1;
+}
+
+VSL_DestroyTextdrawsModeCharacterModes(playerid) {
+
+    for (new txd = 0; txd < 2; txd++) {
+
+        PlayerTextDrawDestroy(playerid, TxdCreateCharacterModesLayout[playerid][txd]);
+        PlayerTextDrawDestroy(playerid, TxdCreateCharacterModesButtonNext[playerid][txd]);
+
+        TxdCreateCharacterModesLayout[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+        TxdCreateCharacterModesButtonNext[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+    }
+
+    for (new txd = 0; txd < 4; txd++) {
+
+        PlayerTextDrawDestroy(playerid, TxdCreateCharacterModesBox[playerid][txd]);
+        PlayerTextDrawDestroy(playerid, TxdCreateCharacterModesSprite[playerid][txd]);
+        PlayerTextDrawDestroy(playerid, TxdCreateCharacterModesName[playerid][txd]);
+        PlayerTextDrawDestroy(playerid, TxdCreateCharacterModesDescription[playerid][txd]);
+        PlayerTextDrawDestroy(playerid, TxdCreateCharacterModesLevel[playerid][txd]);
+        PlayerTextDrawDestroy(playerid, TxdCreateCharacterModesExp[playerid][txd]);
+
+        TxdCreateCharacterModesBox[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+        TxdCreateCharacterModesSprite[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+        TxdCreateCharacterModesName[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+        TxdCreateCharacterModesDescription[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+        TxdCreateCharacterModesLevel[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+        TxdCreateCharacterModesExp[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+    }
+
+    CancelSelectTextDraw(playerid);
     return 1;
 }

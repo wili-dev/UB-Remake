@@ -38,7 +38,7 @@ timer OnTimerLoginSplashBoxMove[100](playerid) {
 timer OnTimerLoginSplashLoadAccount[1500](playerid) {
 
     VSL_DestroyTextdrawsLoginSplash(playerid);
-    SQL_LoginCheckExistsAccount(playerid, ReturnPlayerName(playerid));
+    CheckPlayerLogin(playerid);
 }
 
 //=-=-=-=-=-=-=-=-=-=-=[Callback's]=-=-=-=-=-=-=-=-=-=-=//
@@ -61,7 +61,6 @@ hook OnPlayerDisconnect(playerid, reason) {
 VSL_CreateTextdrawsLoginSplash(playerid) {
 
     SHARED_CreateTextdrawLoginBackground(playerid);
-
 
     TxdLoginSplashLogo[playerid][0] = CreatePlayerTextDraw(playerid, 339.000000, 153.000000, "Preview_Model");
     PlayerTextDrawFont(playerid, TxdLoginSplashLogo[playerid][0], TEXT_DRAW_FONT_MODEL_PREVIEW);

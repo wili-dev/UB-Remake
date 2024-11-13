@@ -41,8 +41,9 @@
 #include "../modules/visual/shared/notifications.pwn"
 
 // # Visual #
+#include "../modules/visual/login_splash/login_splash.pwn"
+
 #include "../modules/visual/login_account/login.pwn"
-#include "../modules/visual/login_account/login_splash.pwn"
 
 #include "../modules/visual/register_account/register_data.pwn"
 #include "../modules/visual/register_account/register_email_code.pwn"
