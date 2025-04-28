@@ -1,0 +1,35 @@
+- Verificar a cor do botão de clicar quando ele está ativo
+- Verificar padrão de variáveis / Prefix
+- Definir variáveis como static e renomear elas
+- Arrumar texto dos modos
+- Objetos do Create Character precisam ser destruídos
+- Precisa colocar para o personagem dar Spawn antes de mostrar no Create Character, para que possa colocar cabelos
+- Todas textdraws de create character devem ser destruidas quando clicar em create character
+- Devemos criar uma função para cuidar do Spawn e não colocar no main_menu
+- Definir uma nomenclação padrão para PlayerTextDrawSetClick
+
+
+Nome
+Apelido
+Data de Nascimento
+Genero
+Nacionalidade
+Etnia
+
+
+
+
+Box Skin
+x = 43 de distância
+y = 94 de distância
+
+
+
+    InterpolateCameraPos(playerid, 207.064682, -231.382614, 2.647306, 206.985504, -230.935119, 2.564025, 3000);
+    InterpolateCameraLookAt(playerid, 206.207565, -226.539779, 1.746010, 206.128387, -226.092285, 1.662729, 3000);
+
+    SetDynamicObjectMaterial(CreateDynamicObject(3095, 205.92958, -227.70790, 1.90500,   90.00000, 0.00000, 0.00000), 0, 18646, "MatColours", "black", 0xFFFFFFFF);
+	SetDynamicObjectMaterial(CreateDynamicObject(3095, 205.92461, -231.02800, 0.24000,   0.00000, 0.00000, 0.00000), 0, 18646, "MatColours", "black", 0xFFFFFFFF);
+
+    SetPlayerPos(playerid, 206.6420,-228.6146,1.7954);
+    SetPlayerFacingAngle(playerid, 192.8569);

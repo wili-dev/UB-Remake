@@ -1,220 +1,341 @@
-//=-=-=-=-=-=-=-=-=-=-=[Include's]=-=-=-=-=-=-=-=-=-=-=//
-#include <YSI_Coding\y_hooks>
+/*======================================================================================================================
+                          _  _    __     __         _       _     _      _         _  _   
+                        _| || |_  \ \   / /_ _ _ __(_) __ _| |__ | | ___( )___   _| || |_ 
+                       |_  ..  _|  \ \ / / _` | '__| |/ _` | '_ \| |/ _ \// __| |_  ..  _|
+                       |_      _|   \ V / (_| | |  | | (_| | |_) | |  __/ \__ \ |_      _|
+                         |_||_|      \_/ \__,_|_|  |_|\__,_|_.__/|_|\___| |___/   |_||_|  
 
-//=-=-=-=-=-=-=-=-=-=-=[Variable's]=-=-=-=-=-=-=-=-=-=//
-new PlayerText:TxdLoginLayoutFieldUser[MAX_PLAYERS][3];
-new PlayerText:TxdLoginLayoutFieldPass[MAX_PLAYERS][3];
-new PlayerText:TxdLoginTextFieldUser[MAX_PLAYERS];
-new PlayerText:TxdLoginTextFieldPass[MAX_PLAYERS][2];
-new PlayerText:TxdButtonLogin[MAX_PLAYERS][2];
-new PlayerText:TxdButtonForgotPass[MAX_PLAYERS];
+======================================================================================================================*/
+
+static PlayerText:m_screenLayoutBoxMenu[MAX_PLAYERS];
+
+static PlayerText:m_screenLayoutLogo[MAX_PLAYERS][3];
+
+static PlayerText:m_screenLayoutFieldUser[MAX_PLAYERS][3];
+static PlayerText:m_screenLayoutFieldPass[MAX_PLAYERS][3];
+
+static PlayerText:m_screenTextFieldUser[MAX_PLAYERS];
+static PlayerText:m_screenTextFieldPass[MAX_PLAYERS][2];
+
+static PlayerText:m_screenButtonForgotPass[MAX_PLAYERS];
+
+static PlayerText:m_screenButtonLogin[MAX_PLAYERS][2];
 
 
-//=-=-=-=-=-=-=-=-=-=-=[Callback's]=-=-=-=-=-=-=-=-=-=-=//
-hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) {
 
-    if (!IsPlayerLogged(playerid)) {
+/*======================================================================================================================
+                           _  _      ____      _ _ _                _    _         _  _   
+                         _| || |_   / ___|__ _| | | |__   __ _  ___| | _( )___   _| || |_ 
+                        |_  ..  _| | |   / _` | | | '_ \ / _` |/ __| |/ /// __| |_  ..  _|
+                        |_      _| | |__| (_| | | | |_) | (_| | (__|   <  \__ \ |_      _|
+                          |_||_|    \____\__,_|_|_|_.__/ \__,_|\___|_|\_\ |___/   |_||_|  
 
-        if (playertextid == TxdLoginTextFieldPass[playerid][0] || playertextid == TxdLoginTextFieldPass[playerid][1]) {
-            return ShowPlayerDialogLogin(playerid);
-        }
-    }
+======================================================================================================================*/
+
+PlayerTextDrawClick:OnClickTextFieldPassLogin(playerid, params) {
+
+    VSL_HideTextdrawsLoginInputPass(playerid);
+
+    ShowPlayerDialogLogin(playerid);
+    return 1;
+}
+
+PlayerTextDrawClick:OnClickButtonScreenLogin(playerid, params) {
+
+    new
+        password[20 + 1];
+    
+    GetPVarString(playerid, "temp_password_login", password);
+
+    bcrypt_verify(playerid, "BcryptCheckPasswordLogin", password, GetPlayerPassword(playerid));
     return 1;
 }
 
 
-//=-=-=-=-=-=-=-=-=-=-=[Function's]=-=-=-=-=-=-=-=-=-=-=//
+
+
+/*======================================================================================================================
+                        _  _     _____                 _   _             _         _  _   
+                      _| || |_  |  ___|   _ _ __   ___| |_(_) ___  _ __ ( )___   _| || |_ 
+                     |_  ..  _| | |_ | | | | '_ \ / __| __| |/ _ \| '_ \|// __| |_  ..  _|
+                     |_      _| |  _|| |_| | | | | (__| |_| | (_) | | | | \__ \ |_      _|
+                       |_||_|   |_|   \__,_|_| |_|\___|\__|_|\___/|_| |_| |___/   |_||_|  
+
+======================================================================================================================*/
+
 VSL_CreateTextdrawsLogin(playerid) {
 
-    TxdLoginLayoutFieldUser[playerid][0] = CreatePlayerTextDraw(playerid, 314.000000, 193.000000, "_");
-    PlayerTextDrawFont(playerid, TxdLoginLayoutFieldUser[playerid][0], TEXT_DRAW_FONT_1);
-    PlayerTextDrawLetterSize(playerid, TxdLoginLayoutFieldUser[playerid][0], 0.600000, 2.000003);
-    PlayerTextDrawTextSize(playerid, TxdLoginLayoutFieldUser[playerid][0], 298.500000, 116.500000);
-    PlayerTextDrawSetOutline(playerid, TxdLoginLayoutFieldUser[playerid][0], 1);
-    PlayerTextDrawSetShadow(playerid, TxdLoginLayoutFieldUser[playerid][0], 0);
-    PlayerTextDrawAlignment(playerid, TxdLoginLayoutFieldUser[playerid][0], TEXT_DRAW_ALIGN_CENTER);
-    PlayerTextDrawColour(playerid, TxdLoginLayoutFieldUser[playerid][0], -1);
-    PlayerTextDrawBackgroundColour(playerid, TxdLoginLayoutFieldUser[playerid][0], 255);
-    PlayerTextDrawBoxColour(playerid, TxdLoginLayoutFieldUser[playerid][0], -1);
-    PlayerTextDrawUseBox(playerid, TxdLoginLayoutFieldUser[playerid][0], true);
-    PlayerTextDrawSetProportional(playerid, TxdLoginLayoutFieldUser[playerid][0], true);
-    PlayerTextDrawSetSelectable(playerid, TxdLoginLayoutFieldUser[playerid][0], false);
-
-    TxdLoginLayoutFieldUser[playerid][1] = CreatePlayerTextDraw(playerid, 264.000000, 193.000000, "_");
-    PlayerTextDrawFont(playerid, TxdLoginLayoutFieldUser[playerid][1], TEXT_DRAW_FONT_1);
-    PlayerTextDrawLetterSize(playerid, TxdLoginLayoutFieldUser[playerid][1], 0.600000, 2.000003);
-    PlayerTextDrawTextSize(playerid, TxdLoginLayoutFieldUser[playerid][1], 298.500000, 18.000000);
-    PlayerTextDrawSetOutline(playerid, TxdLoginLayoutFieldUser[playerid][1], 1);
-    PlayerTextDrawSetShadow(playerid, TxdLoginLayoutFieldUser[playerid][1], 0);
-    PlayerTextDrawAlignment(playerid, TxdLoginLayoutFieldUser[playerid][1], TEXT_DRAW_ALIGN_CENTER);
-    PlayerTextDrawColour(playerid, TxdLoginLayoutFieldUser[playerid][1], -1);
-    PlayerTextDrawBackgroundColour(playerid, TxdLoginLayoutFieldUser[playerid][1], 255);
-    PlayerTextDrawBoxColour(playerid, TxdLoginLayoutFieldUser[playerid][1], 1747094527);
-    PlayerTextDrawUseBox(playerid, TxdLoginLayoutFieldUser[playerid][1], true);
-    PlayerTextDrawSetProportional(playerid, TxdLoginLayoutFieldUser[playerid][1], true);
-    PlayerTextDrawSetSelectable(playerid, TxdLoginLayoutFieldUser[playerid][1], false);
-
-    TxdLoginLayoutFieldUser[playerid][2] = CreatePlayerTextDraw(playerid, 254.000000, 190.000000, "LD_OTB2:Ric4");
-    PlayerTextDrawFont(playerid, TxdLoginLayoutFieldUser[playerid][2], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawLetterSize(playerid, TxdLoginLayoutFieldUser[playerid][2], 0.600000, 2.000000);
-    PlayerTextDrawTextSize(playerid, TxdLoginLayoutFieldUser[playerid][2], 20.000000, 24.000000);
-    PlayerTextDrawSetOutline(playerid, TxdLoginLayoutFieldUser[playerid][2], 1);
-    PlayerTextDrawSetShadow(playerid, TxdLoginLayoutFieldUser[playerid][2], 0);
-    PlayerTextDrawAlignment(playerid, TxdLoginLayoutFieldUser[playerid][2], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, TxdLoginLayoutFieldUser[playerid][2], -1);
-    PlayerTextDrawBackgroundColour(playerid, TxdLoginLayoutFieldUser[playerid][2], 255);
-    PlayerTextDrawBoxColour(playerid, TxdLoginLayoutFieldUser[playerid][2], 50);
-    PlayerTextDrawUseBox(playerid, TxdLoginLayoutFieldUser[playerid][2], true);
-    PlayerTextDrawSetProportional(playerid, TxdLoginLayoutFieldUser[playerid][2], true);
-    PlayerTextDrawSetSelectable(playerid, TxdLoginLayoutFieldUser[playerid][2], false);
+    m_screenLayoutBoxMenu[playerid] = CreatePlayerTextDraw(playerid, 318.0, 3.0, "_");
+    PlayerTextDrawFont(playerid, m_screenLayoutBoxMenu[playerid], TEXT_DRAW_FONT_1);
+    PlayerTextDrawLetterSize(playerid, m_screenLayoutBoxMenu[playerid], 1.158331, 49.9);
+    PlayerTextDrawTextSize(playerid, m_screenLayoutBoxMenu[playerid], 298.5, 182.5);
+    PlayerTextDrawSetOutline(playerid, m_screenLayoutBoxMenu[playerid], 1);
+    PlayerTextDrawSetShadow(playerid, m_screenLayoutBoxMenu[playerid], 0);
+    PlayerTextDrawAlignment(playerid, m_screenLayoutBoxMenu[playerid], TEXT_DRAW_ALIGN_CENTER);
+    PlayerTextDrawColour(playerid, m_screenLayoutBoxMenu[playerid], -1724723969);
+    PlayerTextDrawBackgroundColour(playerid, m_screenLayoutBoxMenu[playerid], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenLayoutBoxMenu[playerid], 168430335);
+    PlayerTextDrawUseBox(playerid, m_screenLayoutBoxMenu[playerid], true);
+    PlayerTextDrawSetProportional(playerid, m_screenLayoutBoxMenu[playerid], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenLayoutBoxMenu[playerid], false);
 
 
-    TxdLoginLayoutFieldPass[playerid][0] = CreatePlayerTextDraw(playerid, 314.000000, 222.000000, "_");
-    PlayerTextDrawFont(playerid, TxdLoginLayoutFieldPass[playerid][0], TEXT_DRAW_FONT_1);
-    PlayerTextDrawLetterSize(playerid, TxdLoginLayoutFieldPass[playerid][0], 0.600000, 2.000003);
-    PlayerTextDrawTextSize(playerid, TxdLoginLayoutFieldPass[playerid][0], 298.500000, 116.500000);
-    PlayerTextDrawSetOutline(playerid, TxdLoginLayoutFieldPass[playerid][0], 1);
-    PlayerTextDrawSetShadow(playerid, TxdLoginLayoutFieldPass[playerid][0], 0);
-    PlayerTextDrawAlignment(playerid, TxdLoginLayoutFieldPass[playerid][0], TEXT_DRAW_ALIGN_CENTER);
-    PlayerTextDrawColour(playerid, TxdLoginLayoutFieldPass[playerid][0], -1);
-    PlayerTextDrawBackgroundColour(playerid, TxdLoginLayoutFieldPass[playerid][0], 255);
-    PlayerTextDrawBoxColour(playerid, TxdLoginLayoutFieldPass[playerid][0], -1);
-    PlayerTextDrawUseBox(playerid, TxdLoginLayoutFieldPass[playerid][0], true);
-    PlayerTextDrawSetProportional(playerid, TxdLoginLayoutFieldPass[playerid][0], true);
-    PlayerTextDrawSetSelectable(playerid, TxdLoginLayoutFieldPass[playerid][0], false);
+    m_screenLayoutLogo[playerid][0] = CreatePlayerTextDraw(playerid, 334.0, 98.0, "Preview_Model");
+    PlayerTextDrawFont(playerid, m_screenLayoutLogo[playerid][0], TEXT_DRAW_FONT_MODEL_PREVIEW);
+    PlayerTextDrawLetterSize(playerid, m_screenLayoutLogo[playerid][0], 0.6, 2.0);
+    PlayerTextDrawTextSize(playerid, m_screenLayoutLogo[playerid][0], 27.5, 35.5);
+    PlayerTextDrawSetOutline(playerid, m_screenLayoutLogo[playerid][0], 0);
+    PlayerTextDrawSetShadow(playerid, m_screenLayoutLogo[playerid][0], 0);
+    PlayerTextDrawAlignment(playerid, m_screenLayoutLogo[playerid][0], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, m_screenLayoutLogo[playerid][0], -1724723969);
+    PlayerTextDrawBackgroundColour(playerid, m_screenLayoutLogo[playerid][0], -1724724224);
+    PlayerTextDrawBoxColour(playerid, m_screenLayoutLogo[playerid][0], 255);
+    PlayerTextDrawUseBox(playerid, m_screenLayoutLogo[playerid][0], false);
+    PlayerTextDrawSetProportional(playerid, m_screenLayoutLogo[playerid][0], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenLayoutLogo[playerid][0], false);
+    PlayerTextDrawSetPreviewModel(playerid, m_screenLayoutLogo[playerid][0], 642);
+    PlayerTextDrawSetPreviewRot(playerid, m_screenLayoutLogo[playerid][0], -10.0, -9.0, 0.0, 1.0);
+    PlayerTextDrawSetPreviewVehicleColours(playerid, m_screenLayoutLogo[playerid][0], 16, 1);
 
-    TxdLoginLayoutFieldPass[playerid][1] = CreatePlayerTextDraw(playerid, 264.000000, 222.000000, "_");
-    PlayerTextDrawFont(playerid, TxdLoginLayoutFieldPass[playerid][1], TEXT_DRAW_FONT_1);
-    PlayerTextDrawLetterSize(playerid, TxdLoginLayoutFieldPass[playerid][1], 0.600000, 2.000003);
-    PlayerTextDrawTextSize(playerid, TxdLoginLayoutFieldPass[playerid][1], 298.500000, 18.000000);
-    PlayerTextDrawSetOutline(playerid, TxdLoginLayoutFieldPass[playerid][1], 1);
-    PlayerTextDrawSetShadow(playerid, TxdLoginLayoutFieldPass[playerid][1], 0);
-    PlayerTextDrawAlignment(playerid, TxdLoginLayoutFieldPass[playerid][1], TEXT_DRAW_ALIGN_CENTER);
-    PlayerTextDrawColour(playerid, TxdLoginLayoutFieldPass[playerid][1], -1);
-    PlayerTextDrawBackgroundColour(playerid, TxdLoginLayoutFieldPass[playerid][1], 255);
-    PlayerTextDrawBoxColour(playerid, TxdLoginLayoutFieldPass[playerid][1], 1747094527);
-    PlayerTextDrawUseBox(playerid, TxdLoginLayoutFieldPass[playerid][1], true);
-    PlayerTextDrawSetProportional(playerid, TxdLoginLayoutFieldPass[playerid][1], true);
-    PlayerTextDrawSetSelectable(playerid, TxdLoginLayoutFieldPass[playerid][1], false);
+    m_screenLayoutLogo[playerid][1] = CreatePlayerTextDraw(playerid, 285.0, 108.0, "Umbrella");
+    PlayerTextDrawFont(playerid, m_screenLayoutLogo[playerid][1], TEXT_DRAW_FONT_2);
+    PlayerTextDrawLetterSize(playerid, m_screenLayoutLogo[playerid][1], 0.312489, 2.849992);
+    PlayerTextDrawTextSize(playerid, m_screenLayoutLogo[playerid][1], 605.5, 17.0);
+    PlayerTextDrawSetOutline(playerid, m_screenLayoutLogo[playerid][1], 0);
+    PlayerTextDrawSetShadow(playerid, m_screenLayoutLogo[playerid][1], 1);
+    PlayerTextDrawAlignment(playerid, m_screenLayoutLogo[playerid][1], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, m_screenLayoutLogo[playerid][1], -1);
+    PlayerTextDrawBackgroundColour(playerid, m_screenLayoutLogo[playerid][1], -1);
+    PlayerTextDrawBoxColour(playerid, m_screenLayoutLogo[playerid][1], 255);
+    PlayerTextDrawUseBox(playerid, m_screenLayoutLogo[playerid][1], false);
+    PlayerTextDrawSetProportional(playerid, m_screenLayoutLogo[playerid][1], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenLayoutLogo[playerid][1], false);
 
-    TxdLoginLayoutFieldPass[playerid][2] = CreatePlayerTextDraw(playerid, 256.000000, 224.000000, "HUD:radar_mafiacasino");
-    PlayerTextDrawFont(playerid, TxdLoginLayoutFieldPass[playerid][2], TEXT_DRAW_FONT_SPRITE_DRAW);
-    PlayerTextDrawLetterSize(playerid, TxdLoginLayoutFieldPass[playerid][2], 0.600000, 2.000000);
-    PlayerTextDrawTextSize(playerid, TxdLoginLayoutFieldPass[playerid][2], 15.000000, 15.000000);
-    PlayerTextDrawSetOutline(playerid, TxdLoginLayoutFieldPass[playerid][2], 1);
-    PlayerTextDrawSetShadow(playerid, TxdLoginLayoutFieldPass[playerid][2], 0);
-    PlayerTextDrawAlignment(playerid, TxdLoginLayoutFieldPass[playerid][2], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, TxdLoginLayoutFieldPass[playerid][2], -1);
-    PlayerTextDrawBackgroundColour(playerid, TxdLoginLayoutFieldPass[playerid][2], 255);
-    PlayerTextDrawBoxColour(playerid, TxdLoginLayoutFieldPass[playerid][2], 50);
-    PlayerTextDrawUseBox(playerid, TxdLoginLayoutFieldPass[playerid][2], true);
-    PlayerTextDrawSetProportional(playerid, TxdLoginLayoutFieldPass[playerid][2], true);
-    PlayerTextDrawSetSelectable(playerid, TxdLoginLayoutFieldPass[playerid][2], false);
-
-
-    TxdLoginTextFieldUser[playerid] = CreatePlayerTextDraw(playerid, 280.000000, 195.000000, "Wili_Macena");
-    PlayerTextDrawFont(playerid, TxdLoginTextFieldUser[playerid], TEXT_DRAW_FONT_2);
-    PlayerTextDrawLetterSize(playerid, TxdLoginTextFieldUser[playerid], 0.174998, 1.349995);
-    PlayerTextDrawTextSize(playerid, TxdLoginTextFieldUser[playerid], 373.000000, 12.000000);
-    PlayerTextDrawSetOutline(playerid, TxdLoginTextFieldUser[playerid], 0);
-    PlayerTextDrawSetShadow(playerid, TxdLoginTextFieldUser[playerid], 0);
-    PlayerTextDrawAlignment(playerid, TxdLoginTextFieldUser[playerid], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, TxdLoginTextFieldUser[playerid], 255);
-    PlayerTextDrawBackgroundColour(playerid, TxdLoginTextFieldUser[playerid], -1);
-    PlayerTextDrawBoxColour(playerid, TxdLoginTextFieldUser[playerid], -1523963342);
-    PlayerTextDrawUseBox(playerid, TxdLoginTextFieldUser[playerid], false);
-    PlayerTextDrawSetProportional(playerid, TxdLoginTextFieldUser[playerid], true);
-    PlayerTextDrawSetSelectable(playerid, TxdLoginTextFieldUser[playerid], false);
-
-    TxdLoginTextFieldPass[playerid][0] = CreatePlayerTextDraw(playerid, 280.000000, 224.000000, "Digite sua senha");
-    PlayerTextDrawFont(playerid, TxdLoginTextFieldPass[playerid][0], TEXT_DRAW_FONT_2);
-    PlayerTextDrawLetterSize(playerid, TxdLoginTextFieldPass[playerid][0], 0.174998, 1.349995);
-    PlayerTextDrawTextSize(playerid, TxdLoginTextFieldPass[playerid][0], 373.000000, 12.000000);
-    PlayerTextDrawSetOutline(playerid, TxdLoginTextFieldPass[playerid][0], 0);
-    PlayerTextDrawSetShadow(playerid, TxdLoginTextFieldPass[playerid][0], 0);
-    PlayerTextDrawAlignment(playerid, TxdLoginTextFieldPass[playerid][0], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, TxdLoginTextFieldPass[playerid][0], 255);
-    PlayerTextDrawBackgroundColour(playerid, TxdLoginTextFieldPass[playerid][0], -1);
-    PlayerTextDrawBoxColour(playerid, TxdLoginTextFieldPass[playerid][0], -1523963342);
-    PlayerTextDrawUseBox(playerid, TxdLoginTextFieldPass[playerid][0], false);
-    PlayerTextDrawSetProportional(playerid, TxdLoginTextFieldPass[playerid][0], true);
-    PlayerTextDrawSetSelectable(playerid, TxdLoginTextFieldPass[playerid][0], true);
-
-    TxdLoginTextFieldPass[playerid][1] = CreatePlayerTextDraw(playerid, 280.000000, 224.000000, "]]]]]]]]]]]]");
-    PlayerTextDrawFont(playerid, TxdLoginTextFieldPass[playerid][1], TEXT_DRAW_FONT_2);
-    PlayerTextDrawLetterSize(playerid, TxdLoginTextFieldPass[playerid][1], 0.220831, 1.349995);
-    PlayerTextDrawTextSize(playerid, TxdLoginTextFieldPass[playerid][1], 373.000000, 12.000000);
-    PlayerTextDrawSetOutline(playerid, TxdLoginTextFieldPass[playerid][1], 0);
-    PlayerTextDrawSetShadow(playerid, TxdLoginTextFieldPass[playerid][1], 0);
-    PlayerTextDrawAlignment(playerid, TxdLoginTextFieldPass[playerid][1], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, TxdLoginTextFieldPass[playerid][1], 255);
-    PlayerTextDrawBackgroundColour(playerid, TxdLoginTextFieldPass[playerid][1], -1);
-    PlayerTextDrawBoxColour(playerid, TxdLoginTextFieldPass[playerid][1], -1523963342);
-    PlayerTextDrawUseBox(playerid, TxdLoginTextFieldPass[playerid][1], false);
-    PlayerTextDrawSetProportional(playerid, TxdLoginTextFieldPass[playerid][1], true);
-    PlayerTextDrawSetSelectable(playerid, TxdLoginTextFieldPass[playerid][1], true);
+    m_screenLayoutLogo[playerid][2] = CreatePlayerTextDraw(playerid, 311.0, 126.0, "Roleplay");
+    PlayerTextDrawFont(playerid, m_screenLayoutLogo[playerid][2], TEXT_DRAW_FONT_0);
+    PlayerTextDrawLetterSize(playerid, m_screenLayoutLogo[playerid][2], 0.304161, 1.399996);
+    PlayerTextDrawTextSize(playerid, m_screenLayoutLogo[playerid][2], 613.5, 12.0);
+    PlayerTextDrawSetOutline(playerid, m_screenLayoutLogo[playerid][2], 0);
+    PlayerTextDrawSetShadow(playerid, m_screenLayoutLogo[playerid][2], 1);
+    PlayerTextDrawAlignment(playerid, m_screenLayoutLogo[playerid][2], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, m_screenLayoutLogo[playerid][2], -1724723969);
+    PlayerTextDrawBackgroundColour(playerid, m_screenLayoutLogo[playerid][2], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenLayoutLogo[playerid][2], 255);
+    PlayerTextDrawUseBox(playerid, m_screenLayoutLogo[playerid][2], false);
+    PlayerTextDrawSetProportional(playerid, m_screenLayoutLogo[playerid][2], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenLayoutLogo[playerid][2], false);
 
 
-    TxdButtonLogin[playerid][0] = CreatePlayerTextDraw(playerid, 314.000000, 290.000000, "_");
-    PlayerTextDrawFont(playerid, TxdButtonLogin[playerid][0], TEXT_DRAW_FONT_1);
-    PlayerTextDrawLetterSize(playerid, TxdButtonLogin[playerid][0], 0.600000, 3.000000);
-    PlayerTextDrawTextSize(playerid, TxdButtonLogin[playerid][0], 298.500000, 116.500000);
-    PlayerTextDrawSetOutline(playerid, TxdButtonLogin[playerid][0], 0);
-    PlayerTextDrawSetShadow(playerid, TxdButtonLogin[playerid][0], 0);
-    PlayerTextDrawAlignment(playerid, TxdButtonLogin[playerid][0], TEXT_DRAW_ALIGN_CENTER);
-    PlayerTextDrawColour(playerid, TxdButtonLogin[playerid][0], -1);
-    PlayerTextDrawBackgroundColour(playerid, TxdButtonLogin[playerid][0], 255);
-    PlayerTextDrawBoxColour(playerid, TxdButtonLogin[playerid][0], 1747094527);
-    PlayerTextDrawUseBox(playerid, TxdButtonLogin[playerid][0], true);
-    PlayerTextDrawSetProportional(playerid, TxdButtonLogin[playerid][0], true);
-    PlayerTextDrawSetSelectable(playerid, TxdButtonLogin[playerid][0], false);
+    m_screenLayoutFieldUser[playerid][0] = CreatePlayerTextDraw(playerid, 318.0, 174.0, "_");
+    PlayerTextDrawFont(playerid, m_screenLayoutFieldUser[playerid][0], TEXT_DRAW_FONT_2);
+    PlayerTextDrawLetterSize(playerid, m_screenLayoutFieldUser[playerid][0], 0.6, 1.5);
+    PlayerTextDrawTextSize(playerid, m_screenLayoutFieldUser[playerid][0], 298.5, 116.5);
+    PlayerTextDrawSetOutline(playerid, m_screenLayoutFieldUser[playerid][0], 1);
+    PlayerTextDrawSetShadow(playerid, m_screenLayoutFieldUser[playerid][0], 0);
+    PlayerTextDrawAlignment(playerid, m_screenLayoutFieldUser[playerid][0], TEXT_DRAW_ALIGN_CENTER);
+    PlayerTextDrawColour(playerid, m_screenLayoutFieldUser[playerid][0], -1724723969);
+    PlayerTextDrawBackgroundColour(playerid, m_screenLayoutFieldUser[playerid][0], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenLayoutFieldUser[playerid][0], -1);
+    PlayerTextDrawUseBox(playerid, m_screenLayoutFieldUser[playerid][0], true);
+    PlayerTextDrawSetProportional(playerid, m_screenLayoutFieldUser[playerid][0], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenLayoutFieldUser[playerid][0], false);
 
-    TxdButtonLogin[playerid][1] = CreatePlayerTextDraw(playerid, 282.000000, 294.000000, "Fazer Login");
-    PlayerTextDrawFont(playerid, TxdButtonLogin[playerid][1], TEXT_DRAW_FONT_3);
-    PlayerTextDrawLetterSize(playerid, TxdButtonLogin[playerid][1], 0.349999, 1.899999);
-    PlayerTextDrawTextSize(playerid, TxdButtonLogin[playerid][1], 348.000000, 16.000000);
-    PlayerTextDrawSetOutline(playerid, TxdButtonLogin[playerid][1], 0);
-    PlayerTextDrawSetShadow(playerid, TxdButtonLogin[playerid][1], 0);
-    PlayerTextDrawAlignment(playerid, TxdButtonLogin[playerid][1], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, TxdButtonLogin[playerid][1], -1);
-    PlayerTextDrawBackgroundColour(playerid, TxdButtonLogin[playerid][1], 255);
-    PlayerTextDrawBoxColour(playerid, TxdButtonLogin[playerid][1], 50);
-    PlayerTextDrawUseBox(playerid, TxdButtonLogin[playerid][1], false);
-    PlayerTextDrawSetProportional(playerid, TxdButtonLogin[playerid][1], true);
-    PlayerTextDrawSetSelectable(playerid, TxdButtonLogin[playerid][1], true);
+    m_screenLayoutFieldUser[playerid][1] = CreatePlayerTextDraw(playerid, 268.0, 174.0, "_");
+    PlayerTextDrawFont(playerid, m_screenLayoutFieldUser[playerid][1], TEXT_DRAW_FONT_2);
+    PlayerTextDrawLetterSize(playerid, m_screenLayoutFieldUser[playerid][1], 0.6, 1.5);
+    PlayerTextDrawTextSize(playerid, m_screenLayoutFieldUser[playerid][1], 298.5, 16.5);
+    PlayerTextDrawSetOutline(playerid, m_screenLayoutFieldUser[playerid][1], 1);
+    PlayerTextDrawSetShadow(playerid, m_screenLayoutFieldUser[playerid][1], 0);
+    PlayerTextDrawAlignment(playerid, m_screenLayoutFieldUser[playerid][1], TEXT_DRAW_ALIGN_CENTER);
+    PlayerTextDrawColour(playerid, m_screenLayoutFieldUser[playerid][1], -1724723969);
+    PlayerTextDrawBackgroundColour(playerid, m_screenLayoutFieldUser[playerid][1], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenLayoutFieldUser[playerid][1], 228);
+    PlayerTextDrawUseBox(playerid, m_screenLayoutFieldUser[playerid][1], true);
+    PlayerTextDrawSetProportional(playerid, m_screenLayoutFieldUser[playerid][1], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenLayoutFieldUser[playerid][1], false);
+
+    m_screenLayoutFieldUser[playerid][2] = CreatePlayerTextDraw(playerid, 259.0, 169.0, "LD_OTB2:Ric4");
+    PlayerTextDrawFont(playerid, m_screenLayoutFieldUser[playerid][2], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawLetterSize(playerid, m_screenLayoutFieldUser[playerid][2], 0.6, 2.0);
+    PlayerTextDrawTextSize(playerid, m_screenLayoutFieldUser[playerid][2], 18.0, 24.0);
+    PlayerTextDrawSetOutline(playerid, m_screenLayoutFieldUser[playerid][2], 1);
+    PlayerTextDrawSetShadow(playerid, m_screenLayoutFieldUser[playerid][2], 0);
+    PlayerTextDrawAlignment(playerid, m_screenLayoutFieldUser[playerid][2], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, m_screenLayoutFieldUser[playerid][2], -1);
+    PlayerTextDrawBackgroundColour(playerid, m_screenLayoutFieldUser[playerid][2], -1);
+    PlayerTextDrawBoxColour(playerid, m_screenLayoutFieldUser[playerid][2], 255);
+    PlayerTextDrawUseBox(playerid, m_screenLayoutFieldUser[playerid][2], true);
+    PlayerTextDrawSetProportional(playerid, m_screenLayoutFieldUser[playerid][2], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenLayoutFieldUser[playerid][2], false);
 
 
-    TxdButtonForgotPass[playerid] = CreatePlayerTextDraw(playerid, 278.000000, 349.000000, "Esqueci minha senha");
-    PlayerTextDrawFont(playerid, TxdButtonForgotPass[playerid], TEXT_DRAW_FONT_2);
-    PlayerTextDrawLetterSize(playerid, TxdButtonForgotPass[playerid], 0.162496, 1.199995);
-    PlayerTextDrawTextSize(playerid, TxdButtonForgotPass[playerid], 353.500000, 12.000000);
-    PlayerTextDrawSetOutline(playerid, TxdButtonForgotPass[playerid], 0);
-    PlayerTextDrawSetShadow(playerid, TxdButtonForgotPass[playerid], 0);
-    PlayerTextDrawAlignment(playerid, TxdButtonForgotPass[playerid], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, TxdButtonForgotPass[playerid], 1296911871);
-    PlayerTextDrawBackgroundColour(playerid, TxdButtonForgotPass[playerid], -1);
-    PlayerTextDrawBoxColour(playerid, TxdButtonForgotPass[playerid], -1523963342);
-    PlayerTextDrawUseBox(playerid, TxdButtonForgotPass[playerid], false);
-    PlayerTextDrawSetProportional(playerid, TxdButtonForgotPass[playerid], true);
-    PlayerTextDrawSetSelectable(playerid, TxdButtonForgotPass[playerid], true);
+    m_screenLayoutFieldPass[playerid][0] = CreatePlayerTextDraw(playerid, 318.0, 204.0, "_");
+    PlayerTextDrawFont(playerid, m_screenLayoutFieldPass[playerid][0], TEXT_DRAW_FONT_2);
+    PlayerTextDrawLetterSize(playerid, m_screenLayoutFieldPass[playerid][0], 0.6, 1.5);
+    PlayerTextDrawTextSize(playerid, m_screenLayoutFieldPass[playerid][0], 298.5, 116.5);
+    PlayerTextDrawSetOutline(playerid, m_screenLayoutFieldPass[playerid][0], 1);
+    PlayerTextDrawSetShadow(playerid, m_screenLayoutFieldPass[playerid][0], 0);
+    PlayerTextDrawAlignment(playerid, m_screenLayoutFieldPass[playerid][0], TEXT_DRAW_ALIGN_CENTER);
+    PlayerTextDrawColour(playerid, m_screenLayoutFieldPass[playerid][0], -1724723969);
+    PlayerTextDrawBackgroundColour(playerid, m_screenLayoutFieldPass[playerid][0], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenLayoutFieldPass[playerid][0], -1);
+    PlayerTextDrawUseBox(playerid, m_screenLayoutFieldPass[playerid][0], true);
+    PlayerTextDrawSetProportional(playerid, m_screenLayoutFieldPass[playerid][0], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenLayoutFieldPass[playerid][0], false);
+
+    m_screenLayoutFieldPass[playerid][1] = CreatePlayerTextDraw(playerid, 268.0, 204.0, "_");
+    PlayerTextDrawFont(playerid, m_screenLayoutFieldPass[playerid][1], TEXT_DRAW_FONT_2);
+    PlayerTextDrawLetterSize(playerid, m_screenLayoutFieldPass[playerid][1], 0.6, 1.5);
+    PlayerTextDrawTextSize(playerid, m_screenLayoutFieldPass[playerid][1], 298.5, 16.5);
+    PlayerTextDrawSetOutline(playerid, m_screenLayoutFieldPass[playerid][1], 1);
+    PlayerTextDrawSetShadow(playerid, m_screenLayoutFieldPass[playerid][1], 0);
+    PlayerTextDrawAlignment(playerid, m_screenLayoutFieldPass[playerid][1], TEXT_DRAW_ALIGN_CENTER);
+    PlayerTextDrawColour(playerid, m_screenLayoutFieldPass[playerid][1], -1724723969);
+    PlayerTextDrawBackgroundColour(playerid, m_screenLayoutFieldPass[playerid][1], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenLayoutFieldPass[playerid][1], 228);
+    PlayerTextDrawUseBox(playerid, m_screenLayoutFieldPass[playerid][1], true);
+    PlayerTextDrawSetProportional(playerid, m_screenLayoutFieldPass[playerid][1], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenLayoutFieldPass[playerid][1], false);
+
+    m_screenLayoutFieldPass[playerid][2] = CreatePlayerTextDraw(playerid, 260.0, 203.0, "HUD:radar_mafiacasino");
+    PlayerTextDrawFont(playerid, m_screenLayoutFieldPass[playerid][2], TEXT_DRAW_FONT_SPRITE_DRAW);
+    PlayerTextDrawLetterSize(playerid, m_screenLayoutFieldPass[playerid][2], 0.6, 2.0);
+    PlayerTextDrawTextSize(playerid, m_screenLayoutFieldPass[playerid][2], 15.0, 15.0);
+    PlayerTextDrawSetOutline(playerid, m_screenLayoutFieldPass[playerid][2], 1);
+    PlayerTextDrawSetShadow(playerid, m_screenLayoutFieldPass[playerid][2], 0);
+    PlayerTextDrawAlignment(playerid, m_screenLayoutFieldPass[playerid][2], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, m_screenLayoutFieldPass[playerid][2], -1);
+    PlayerTextDrawBackgroundColour(playerid, m_screenLayoutFieldPass[playerid][2], -1);
+    PlayerTextDrawBoxColour(playerid, m_screenLayoutFieldPass[playerid][2], 255);
+    PlayerTextDrawUseBox(playerid, m_screenLayoutFieldPass[playerid][2], true);
+    PlayerTextDrawSetProportional(playerid, m_screenLayoutFieldPass[playerid][2], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenLayoutFieldPass[playerid][2], false);
+
+
+    m_screenTextFieldUser[playerid] = CreatePlayerTextDraw(playerid, 326.0, 176.0, "Wili_Macena");
+    PlayerTextDrawFont(playerid, m_screenTextFieldUser[playerid], TEXT_DRAW_FONT_2);
+    PlayerTextDrawLetterSize(playerid, m_screenTextFieldUser[playerid], 0.141653, 0.999997);
+    PlayerTextDrawTextSize(playerid, m_screenTextFieldUser[playerid], 605.5, 17.0);
+    PlayerTextDrawSetOutline(playerid, m_screenTextFieldUser[playerid], 0);
+    PlayerTextDrawSetShadow(playerid, m_screenTextFieldUser[playerid], 0);
+    PlayerTextDrawAlignment(playerid, m_screenTextFieldUser[playerid], TEXT_DRAW_ALIGN_CENTER);
+    PlayerTextDrawColour(playerid, m_screenTextFieldUser[playerid], 255);
+    PlayerTextDrawBackgroundColour(playerid, m_screenTextFieldUser[playerid], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenTextFieldUser[playerid], 255);
+    PlayerTextDrawUseBox(playerid, m_screenTextFieldUser[playerid], false);
+    PlayerTextDrawSetProportional(playerid, m_screenTextFieldUser[playerid], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenTextFieldUser[playerid], false);
+
+
+    m_screenTextFieldPass[playerid][0] = CreatePlayerTextDraw(playerid, 329.0, 206.0, "Digite sua senha");
+    PlayerTextDrawFont(playerid, m_screenTextFieldPass[playerid][0], TEXT_DRAW_FONT_2);
+    PlayerTextDrawLetterSize(playerid, m_screenTextFieldPass[playerid][0], 0.141653, 0.999997);
+    PlayerTextDrawTextSize(playerid, m_screenTextFieldPass[playerid][0], 11.0, 88.0);
+    PlayerTextDrawSetOutline(playerid, m_screenTextFieldPass[playerid][0], 0);
+    PlayerTextDrawSetShadow(playerid, m_screenTextFieldPass[playerid][0], 0);
+    PlayerTextDrawAlignment(playerid, m_screenTextFieldPass[playerid][0], TEXT_DRAW_ALIGN_CENTER);
+    PlayerTextDrawColour(playerid, m_screenTextFieldPass[playerid][0], 255);
+    PlayerTextDrawBackgroundColour(playerid, m_screenTextFieldPass[playerid][0], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenTextFieldPass[playerid][0], 255);
+    PlayerTextDrawUseBox(playerid, m_screenTextFieldPass[playerid][0], false);
+    PlayerTextDrawSetProportional(playerid, m_screenTextFieldPass[playerid][0], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenTextFieldPass[playerid][0], true);
+
+    m_screenTextFieldPass[playerid][1] = CreatePlayerTextDraw(playerid, 329.0, 206.0, "]]]]]");
+    PlayerTextDrawFont(playerid, m_screenTextFieldPass[playerid][1], TEXT_DRAW_FONT_2);
+    PlayerTextDrawLetterSize(playerid, m_screenTextFieldPass[playerid][1], 0.183319, 0.999997);
+    PlayerTextDrawTextSize(playerid, m_screenTextFieldPass[playerid][1], 11.0, 88.0);
+    PlayerTextDrawSetOutline(playerid, m_screenTextFieldPass[playerid][1], 0);
+    PlayerTextDrawSetShadow(playerid, m_screenTextFieldPass[playerid][1], 0);
+    PlayerTextDrawAlignment(playerid, m_screenTextFieldPass[playerid][1], TEXT_DRAW_ALIGN_CENTER);
+    PlayerTextDrawColour(playerid, m_screenTextFieldPass[playerid][1], 255);
+    PlayerTextDrawBackgroundColour(playerid, m_screenTextFieldPass[playerid][1], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenTextFieldPass[playerid][1], 255);
+    PlayerTextDrawUseBox(playerid, m_screenTextFieldPass[playerid][1], false);
+    PlayerTextDrawSetProportional(playerid, m_screenTextFieldPass[playerid][1], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenTextFieldPass[playerid][1], true);
+
+
+    m_screenButtonLogin[playerid][0] = CreatePlayerTextDraw(playerid, 318.0, 275.0, "_");
+    PlayerTextDrawFont(playerid, m_screenButtonLogin[playerid][0], TEXT_DRAW_FONT_2);
+    PlayerTextDrawLetterSize(playerid, m_screenButtonLogin[playerid][0], 0.6, 1.450003);
+    PlayerTextDrawTextSize(playerid, m_screenButtonLogin[playerid][0], 298.5, 116.5);
+    PlayerTextDrawSetOutline(playerid, m_screenButtonLogin[playerid][0], 1);
+    PlayerTextDrawSetShadow(playerid, m_screenButtonLogin[playerid][0], 0);
+    PlayerTextDrawAlignment(playerid, m_screenButtonLogin[playerid][0], TEXT_DRAW_ALIGN_CENTER);
+    PlayerTextDrawColour(playerid, m_screenButtonLogin[playerid][0], -1724724069);
+    PlayerTextDrawBackgroundColour(playerid, m_screenButtonLogin[playerid][0], -1);
+    PlayerTextDrawBoxColour(playerid, m_screenButtonLogin[playerid][0], -1724724069);
+    PlayerTextDrawUseBox(playerid, m_screenButtonLogin[playerid][0], true);
+    PlayerTextDrawSetProportional(playerid, m_screenButtonLogin[playerid][0], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenButtonLogin[playerid][0], false);
+
+    m_screenButtonLogin[playerid][1] = CreatePlayerTextDraw(playerid, 300.0, 275.0, "Fazer Login");
+    PlayerTextDrawFont(playerid, m_screenButtonLogin[playerid][1], TEXT_DRAW_FONT_3);
+    PlayerTextDrawLetterSize(playerid, m_screenButtonLogin[playerid][1], 0.204162, 1.299998);
+    PlayerTextDrawTextSize(playerid, m_screenButtonLogin[playerid][1], 338.5, 11.0);
+    PlayerTextDrawSetOutline(playerid, m_screenButtonLogin[playerid][1], 0);
+    PlayerTextDrawSetShadow(playerid, m_screenButtonLogin[playerid][1], 0);
+    PlayerTextDrawAlignment(playerid, m_screenButtonLogin[playerid][1], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, m_screenButtonLogin[playerid][1], -101);
+    PlayerTextDrawBackgroundColour(playerid, m_screenButtonLogin[playerid][1], -1);
+    PlayerTextDrawBoxColour(playerid, m_screenButtonLogin[playerid][1], -1);
+    PlayerTextDrawUseBox(playerid, m_screenButtonLogin[playerid][1], false);
+    PlayerTextDrawSetProportional(playerid, m_screenButtonLogin[playerid][1], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenButtonLogin[playerid][1], false);
+
+
+    m_screenButtonForgotPass[playerid] = CreatePlayerTextDraw(playerid, 293.0, 348.0, ". Recuperar minha senha");
+    PlayerTextDrawFont(playerid, m_screenButtonForgotPass[playerid], TEXT_DRAW_FONT_1);
+    PlayerTextDrawLetterSize(playerid, m_screenButtonForgotPass[playerid], 0.170828, 1.049996);
+    PlayerTextDrawTextSize(playerid, m_screenButtonForgotPass[playerid], 10.0, 70.0);
+    PlayerTextDrawSetOutline(playerid, m_screenButtonForgotPass[playerid], 0);
+    PlayerTextDrawSetShadow(playerid, m_screenButtonForgotPass[playerid], 0);
+    PlayerTextDrawAlignment(playerid, m_screenButtonForgotPass[playerid], TEXT_DRAW_ALIGN_CENTER);
+    PlayerTextDrawColour(playerid, m_screenButtonForgotPass[playerid], -1061109505);
+    PlayerTextDrawBackgroundColour(playerid, m_screenButtonForgotPass[playerid], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenButtonForgotPass[playerid], 255);
+    PlayerTextDrawUseBox(playerid, m_screenButtonForgotPass[playerid], false);
+    PlayerTextDrawSetProportional(playerid, m_screenButtonForgotPass[playerid], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenButtonForgotPass[playerid], true);
+
+
+
+    for (new txd = 0; txd < 2; txd++) {
+        PlayerTextDrawSetClick(playerid, "OnClickTextFieldPassLogin", m_screenTextFieldPass[playerid][txd], txd);
+    }
+
+    PlayerTextDrawSetClick(playerid, "OnClickButtonScreenLogin", m_screenButtonLogin[playerid][1]);
     return 1;
 }
 
 VSL_ShowTextdrawsLogin(playerid) {
 
-    PlayerTextDrawShow(playerid, TxdLoginTextFieldUser[playerid]);
-    PlayerTextDrawShow(playerid, TxdLoginTextFieldPass[playerid][0]);
-    PlayerTextDrawShow(playerid, TxdButtonForgotPass[playerid]);
+    new
+        password[20 + 1];
+
+    PlayerTextDrawShow(playerid, m_screenLayoutBoxMenu[playerid]);
 
     for (new txd = 0; txd < 3; txd++) {
 
-        PlayerTextDrawShow(playerid, TxdLoginLayoutFieldUser[playerid][txd]);
-        PlayerTextDrawShow(playerid, TxdLoginLayoutFieldPass[playerid][txd]);
+        // PlayerTextDrawShow(playerid, m_screenLayoutLogo[playerid][txd]);
+        PlayerTextDrawShow(playerid, m_screenLayoutFieldUser[playerid][txd]);
+        PlayerTextDrawShow(playerid, m_screenLayoutFieldPass[playerid][txd]);
     }
 
-    for (new txd = 0; txd < 2; txd++) {
+    PlayerTextDrawShow(playerid, m_screenTextFieldUser[playerid]);
 
-        PlayerTextDrawShow(playerid, TxdButtonLogin[playerid][txd]);
+    PlayerTextDrawShow(playerid, m_screenButtonForgotPass[playerid]);
+    
+    GetPVarString(playerid, "temp_password_login", password);
+
+    if (isnull(password))
+       PlayerTextDrawShow(playerid, m_screenTextFieldPass[playerid][0]);
+    else
+        PlayerTextDrawShow(playerid, m_screenTextFieldPass[playerid][1]);
+
+    for (new txd = 0; txd < 2; txd++) {
+        PlayerTextDrawShow(playerid, m_screenButtonLogin[playerid][txd]);
     }
 
     SelectTextDraw(playerid, 0x7E57C2FF);
@@ -223,54 +344,110 @@ VSL_ShowTextdrawsLogin(playerid) {
 
 VSL_HideTextdrawsLoginInputPass(playerid) {
 
-    PlayerTextDrawHide(playerid, TxdLoginTextFieldUser[playerid]);
-    PlayerTextDrawHide(playerid, TxdButtonForgotPass[playerid]);
+    for (new txd = 0; txd < 3; txd++) {
+
+        PlayerTextDrawHide(playerid, m_screenLayoutFieldUser[playerid][txd]);
+        PlayerTextDrawHide(playerid, m_screenLayoutFieldPass[playerid][txd]);
+    }
+
+    PlayerTextDrawHide(playerid, m_screenTextFieldUser[playerid]);
+
+    PlayerTextDrawHide(playerid, m_screenButtonForgotPass[playerid]);
+
+    for (new txd = 0; txd < 2; txd++) {
+    
+        PlayerTextDrawHide(playerid, m_screenTextFieldPass[playerid][txd]);
+        PlayerTextDrawHide(playerid, m_screenButtonLogin[playerid][txd]);
+    }
+    return 1;
+}
+
+VSL_DestroyTextdrawsLogin(playerid) {
+
+    PlayerTextDrawDestroy(playerid, m_screenLayoutBoxMenu[playerid]);
+    m_screenLayoutBoxMenu[playerid] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
 
     for (new txd = 0; txd < 3; txd++) {
 
-        PlayerTextDrawHide(playerid, TxdLoginLayoutFieldUser[playerid][txd]);
-        PlayerTextDrawHide(playerid, TxdLoginLayoutFieldPass[playerid][txd]);
+        PlayerTextDrawDestroy(playerid, m_screenLayoutLogo[playerid][txd]);
+        m_screenLayoutLogo[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+
+        PlayerTextDrawDestroy(playerid, m_screenLayoutFieldUser[playerid][txd]);
+        m_screenLayoutFieldUser[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+
+        PlayerTextDrawDestroy(playerid, m_screenLayoutFieldPass[playerid][txd]);
+        m_screenLayoutFieldPass[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
     }
 
-    for (new txd = 0; txd < 2; txd++) {
+    PlayerTextDrawDestroy(playerid, m_screenTextFieldUser[playerid]);
+    m_screenTextFieldUser[playerid] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
 
-        PlayerTextDrawHide(playerid, TxdLoginTextFieldPass[playerid][txd]);
-        PlayerTextDrawHide(playerid, TxdButtonLogin[playerid][txd]);
+
+    PlayerTextDrawDestroy(playerid, m_screenButtonForgotPass[playerid]);
+    m_screenButtonForgotPass[playerid] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+
+    for (new txd = 0; txd < 2; txd++) {
+        
+        PlayerTextDrawDestroy(playerid, m_screenTextFieldPass[playerid][txd]);
+        m_screenTextFieldPass[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+
+        PlayerTextDrawDestroy(playerid, m_screenButtonLogin[playerid][txd]);
+        m_screenButtonLogin[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
     }
 
     CancelSelectTextDraw(playerid);
     return 1;
 }
 
-VSL_DestroyTextdrawsLogin(playerid) {
 
-    SHARED_DestroyTextdrawLoginBackground(playerid);
-    SHARED_DestroyTextdrawLoginLogo(playerid);
+/*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+VSL_UpdateTextdrawLayoutFieldPassLogin(playerid) {
 
-    PlayerTextDrawDestroy(playerid, TxdLoginTextFieldUser[playerid]);
-    PlayerTextDrawDestroy(playerid, TxdButtonForgotPass[playerid]);
+    new
+        password[20 + 1];
 
-    TxdLoginTextFieldUser[playerid] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
-    TxdButtonForgotPass[playerid] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+    GetPVarString(playerid, "temp_password_login", password);
 
-    for (new txd = 0; txd < 3; txd++) {
+    if (isnull(password)) {
 
-        PlayerTextDrawDestroy(playerid, TxdLoginLayoutFieldUser[playerid][txd]);
-        PlayerTextDrawDestroy(playerid, TxdLoginLayoutFieldPass[playerid][txd]);
+       PlayerTextDrawHide(playerid, m_screenTextFieldPass[playerid][1]);
+       PlayerTextDrawShow(playerid, m_screenTextFieldPass[playerid][0]);
+    }
+    else {
 
-        TxdLoginLayoutFieldUser[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
-        TxdLoginLayoutFieldPass[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+        PlayerTextDrawHide(playerid, m_screenTextFieldPass[playerid][0]);
+        PlayerTextDrawShow(playerid, m_screenTextFieldPass[playerid][1]);
+    }
+    return 1;
+}
+
+
+/*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+VSL_SetStrTextFieldPassScreenLogin(playerid, const password[]) {
+    return PlayerTextDrawSetString(playerid, m_screenTextFieldPass[playerid][1], GetFormatPasswordTextdraw(password));
+}
+
+
+/*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+VSL_EnableButtonLoginScreenLogin(playerid, bool:toggle) {
+
+    if (toggle) {
+
+        PlayerTextDrawBoxColour(playerid, m_screenButtonLogin[playerid][0], -1724723969);
+
+        PlayerTextDrawColour(playerid, m_screenButtonLogin[playerid][1], -1);
+        PlayerTextDrawSetSelectable(playerid, m_screenButtonLogin[playerid][1], true);
+    }
+    else {
+
+        PlayerTextDrawBoxColour(playerid, m_screenButtonLogin[playerid][0], -1724724069);
+
+        PlayerTextDrawColour(playerid, m_screenButtonLogin[playerid][1], -101);
+        PlayerTextDrawSetSelectable(playerid, m_screenButtonLogin[playerid][1], false);
     }
 
     for (new txd = 0; txd < 2; txd++) {
-
-        PlayerTextDrawDestroy(playerid, TxdLoginTextFieldPass[playerid][txd]);
-        PlayerTextDrawDestroy(playerid, TxdButtonLogin[playerid][txd]);
-
-        TxdLoginTextFieldPass[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
-        TxdButtonLogin[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+        PlayerTextDrawShow(playerid, m_screenButtonLogin[playerid][txd]);
     }
-
-    CancelSelectTextDraw(playerid);
     return 1;
 }

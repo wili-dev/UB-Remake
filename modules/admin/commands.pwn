@@ -1,4 +1,10 @@
 //=-=-=-=-=-=-=-=-=-=-=[Command's]=-=-=-=-=-=-=-=-=-=-=//
+YCMD:splash(playerid, params[], help) 
+{
+    VSL_CreateTextdrawsLoginSplash(playerid);
+    VSL_ShowTextdrawsLoginSplash(playerid);
+    return 1;
+}
 YCMD:sultan(playerid, params[], help) 
 {
     new

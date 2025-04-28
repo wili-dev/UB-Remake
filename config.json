@@ -11,10 +11,11 @@
         "dark": "",
         "light": ""
     },
-    "chat_input_filter": true,
+    "logo": "",
     "discord": {
         "invite": ""
     },
+    "chat_input_filter": true,
     "enable_query": true,
     "exclude": [
         "Fixes"
@@ -63,7 +64,7 @@
         "use_prefix": true,
         "use_timestamp": true
     },
-    "max_bots": 0,
+    "max_bots": 1,
     "max_players": 50,
     "name": "Umbrella Roleplay | #Remake",
     "network": {

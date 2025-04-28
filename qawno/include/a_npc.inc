@@ -1,5 +1,64 @@
-#if defined _INC_a_npc
-	#endinput
-#endif
+native NPC_Create(const name[]);
+native NPC_Destroy(npcid);
+native NPC_IsValid(npcid);
+native NPC_Spawn(npcid);
+native NPC_SetPos(npcid, Float:x, Float:y, Float:z);
+native NPC_GetPos(npcid, &Float:x, &Float:y, &Float:z);
+native NPC_SetRot(npcid, Float:x, Float:y, Float:z);
+native NPC_GetRot(npcid, &Float:x, &Float:y, &Float:z);
+native NPC_SetFacingAngle(npcid, Float:angle);
+native NPC_GetFacingAngle(npcid, &Float:angle);
+native NPC_SetVirtualWorld(npcid, vw);
+native NPC_GetVirtualWorld(npcid, &vw);
+native NPC_Move(npcid, Float:x, Float:y, Float:z, moveType, Float:moveSpeed = -1.0);
+native NPC_StopMove(npcid);
+native bool:NPC_IsMoving(npcid);
+native NPC_SetSkin(npcid, model);
+native NPC_IsStreamedIn(npcid, playerid);
+native NPC_IsAnyStreamedIn(npcid);
+native NPC_GetAll(npcs[], size = sizeof(npcs));
+native NPC_SetInterior(npcid, interiorid);
+native NPC_GetInterior(npcid);
+native NPC_SetHealth(npcid, Float:health);
+native Float:NPC_GetHealth(npcid);
+native NPC_SetArmour(npcid, Float:armour);
+native Float:NPC_GetArmour(npcid);
+native NPC_ApplyAnimation(npcid, const animLib[], const animName[], Float:delta, bool:loop, bool:lockX, bool:lockY, bool:freeze, time, sync);
+native NPC_SetWeapon(npcid, weapon);
+native NPC_GetWeapon(npcid);
+native NPC_SetAmmo(npcid, ammo);
+native NPC_GetAmmo(npcid);
+native NPC_SetKeys(npcid, upAndDown, leftAndRight, keys);
+native NPC_GetKeys(npcid, &upAnddown, &leftandRight, &keys);
+native NPC_MeleeAttack(npcid, time, bool:secondaryAttack = false);
+native NPC_StopMeleeAttack(npcid);
+native bool:NPC_IsMeleeAttacking(npcid);
+native NPC_SetFightingStyle(npcid, style);
+native NPC_GetFightingStyle(npcid);
+native NPC_EnableReloading(npcid, bool:enable);
+native bool:NPC_IsReloadEnabled(npcid);
+native bool:NPC_IsReloading(npcid);
+native NPC_EnableInfiniteAmmo(npcid, bool:enable);
+native bool:NPC_IsInfiniteAmmoEnabled(npcid);
+native NPC_GetWeaponState(npcid);
+native NPC_SetAmmoInClip(npcid, ammo);
+native NPC_GetAmmoInClip(npcid);
+native NPC_Shoot(npcid, weapon, hitId, hitType, Float:endPointX, Float:endPointY, Float:endPointZ, Float:offsetX, Float:offsetY, Float:offsetZ, bool:isHit, checkInBetweenFlags);
+native bool:NPC_IsShooting(npcid);
+native NPC_AimAt(npcid, Float:pointX, Float:pointY, Float:pointZ, bool:shoot, shootDelay, bool:updateAngle, Float:offsetFromX, Float:offsetFromY, Float:offsetFromZ, checkInBetweenFlags);
+native NPC_AimAtPlayer(npcid, playerid, bool:shoot, shootDelay, bool:updateAngle, Float:offsetX, Float:offsetY, Float:offsetZ, Float:offsetFromX, Float:offsetFromY, Float:offsetFromZ, checkInBetweenFlags);
+native NPC_StopAim(npcid);
+native bool:NPC_IsAiming(npcid);
+native bool:NPC_IsAimingAtPlayer(npcid, playerid);
+native NPC_SetWeaponAccuracy(npcid, weaponid, Float:accuracy);
+native Float:NPC_GetWeaponAccuracy(npcid, weaponid);
 
-#error open.mp doesn't yet support NPC scripts.
+
+forward OnNPCFinishMove(npcid);
+forward OnNPCCreate(npcid);
+forward OnNPCDestroy(npcid);
+forward OnNPCTakeDamage(npcid, damagerid, Float:damage, WEAPON:weapon, bodypart);
+forward OnNPCGiveDamage(npcid, damagedid, Float:damage, WEAPON:weapon, bodypart);
+forward OnNPCDeath(npcid, killerid, reason);
+forward onNPCSpawn(npcid);
+forward OnNPCWeaponStateChange(npcid, newState, oldState);

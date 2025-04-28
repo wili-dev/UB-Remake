@@ -1,326 +1,498 @@
-//=-=-=-=-=-=-=-=-=-=-=[Include's]=-=-=-=-=-=-=-=-=-=-=//
+/*======================================================================================================================
+                              _  _     ___            _           _      _         _  _   
+                            _| || |_  |_ _|_ __   ___| |_   _  __| | ___( )___   _| || |_ 
+                           |_  ..  _|  | || '_ \ / __| | | | |/ _` |/ _ \// __| |_  ..  _|
+                           |_      _|  | || | | | (__| | |_| | (_| |  __/ \__ \ |_      _|
+                             |_||_|   |___|_| |_|\___|_|\__,_|\__,_|\___| |___/   |_||_|  
+
+======================================================================================================================*/
+
 #include <YSI_Coding\y_hooks>
 
-//=-=-=-=-=-=-=-=-=-=-=[Variable's]=-=-=-=-=-=-=-=-=-=//
-new _tempPlayerTxdCharacterModeIndex[MAX_PLAYERS char];
 
-new PlayerText:TxdCreateCharacterModesLayout[MAX_PLAYERS][2];
-new PlayerText:TxdCreateCharacterModesBox[MAX_PLAYERS][4];
-new PlayerText:TxdCreateCharacterModesSprite[MAX_PLAYERS][4];
-new PlayerText:TxdCreateCharacterModesName[MAX_PLAYERS][4];
-new PlayerText:TxdCreateCharacterModesDescription[MAX_PLAYERS][4];
-new PlayerText:TxdCreateCharacterModesLevel[MAX_PLAYERS][4];
-new PlayerText:TxdCreateCharacterModesExp[MAX_PLAYERS][4];
-new PlayerText:TxdCreateCharacterModesButtonNext[MAX_PLAYERS][2];
+/*======================================================================================================================
+                          _  _    __     __         _       _     _      _         _  _   
+                        _| || |_  \ \   / /_ _ _ __(_) __ _| |__ | | ___( )___   _| || |_ 
+                       |_  ..  _|  \ \ / / _` | '__| |/ _` | '_ \| |/ _ \// __| |_  ..  _|
+                       |_      _|   \ V / (_| | |  | | (_| | |_) | |  __/ \__ \ |_      _|
+                         |_||_|      \_/ \__,_|_|  |_|\__,_|_.__/|_|\___| |___/   |_||_|  
+
+======================================================================================================================*/
+
+static m_playerModeIndexSelected[MAX_PLAYERS char];
+
+static PlayerText:m_screenLayout[MAX_PLAYERS][2];
+
+static PlayerText:m_screenMenuOptions[MAX_PLAYERS][4];
+static PlayerText:m_screenMenuOptionIcon[MAX_PLAYERS];
+static PlayerText:m_screenMenuOptionBox[MAX_PLAYERS];
+
+static PlayerText:m_screenModeName[MAX_PLAYERS];
+static PlayerText:m_screenModeDescription[MAX_PLAYERS];
+static PlayerText:m_screenModeStats[MAX_PLAYERS];
+
+static PlayerText:m_screenButtonNext[MAX_PLAYERS][2];
 
 
-//=-=-=-=-=-=-=-=-=-=-=[Callback's]=-=-=-=-=-=-=-=-=-=-=//
+/*======================================================================================================================
+                           _  _      ____      _ _ _                _    _         _  _   
+                         _| || |_   / ___|__ _| | | |__   __ _  ___| | _( )___   _| || |_ 
+                        |_  ..  _| | |   / _` | | | '_ \ / _` |/ __| |/ /// __| |_  ..  _|
+                        |_      _| | |__| (_| | | | |_) | (_| | (__|   <  \__ \ |_      _|
+                          |_||_|    \____\__,_|_|_|_.__/ \__,_|\___|_|\_\ |___/   |_||_|  
+
+======================================================================================================================*/
+
 hook OnPlayerConnect(playerid) {
 
-    _tempPlayerTxdCharacterModeIndex{playerid} = 0;
-    return 1;
-}
-
-hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) {
-
-    if (!IsPlayerLogged(playerid)) {
-
-        if (playertextid == TxdCreateCharacterModesButtonNext[playerid][1]) {
-
-            SetPlayerLogged(playerid, true);
-            SetCharacterSpawned(playerid, true);
-
-            SHARED_DestroyTextdrawLoginBackground(playerid);
-            VSL_DestroyTextdrawsModeCharacterModes(playerid);
-            // SetSpawnInfo(playerid, NO_TEAM, 292, 375.3465, -175.5020, 1030.6801, 90.0);
-            SetSpawnInfo(playerid, NO_TEAM, 292, 0, 0, 0, 90.0);
-            TogglePlayerSpectating(playerid, false);
-            SpawnPlayer(playerid);
-        }
-        else {
-
-            for (new txd = 0; txd < 4; txd++) {
-
-                if (playertextid == TxdCreateCharacterModesBox[playerid][txd]) {
-
-                    if (!tempPlayerCharacterModeId{playerid}) {
-
-                        PlayerTextDrawBoxColour(playerid, TxdCreateCharacterModesButtonNext[playerid][0], 1747094527);
-                        PlayerTextDrawColour(playerid, TxdCreateCharacterModesButtonNext[playerid][1], -1);
-
-                        PlayerTextDrawSetSelectable(playerid, TxdCreateCharacterModesButtonNext[playerid][1], true);
-
-                        PlayerTextDrawShow(playerid, TxdCreateCharacterModesButtonNext[playerid][0]);
-                        PlayerTextDrawShow(playerid, TxdCreateCharacterModesButtonNext[playerid][1]);
-                    }
-
-                    VSL_UpdateTextdrawsBoxModeCharacterModes(playerid, txd);
-                    tempPlayerCharacterModeId{playerid} = txd + 1;
-                    break;
-                }
-            }
-        }
-    }
+    m_playerModeIndexSelected{playerid} = 255;
     return 1;
 }
 
 
-//=-=-=-=-=-=-=-=-=-=-=[Function's]=-=-=-=-=-=-=-=-=-=-=//
-VSL_CreateTextdrawsCharacterModes(playerid) {
+PlayerTextDrawClick:OnClickModeOptions(playerid, index) {
 
-    TxdCreateCharacterModesLayout[playerid][0] = CreatePlayerTextDraw(playerid, 246.000000, 30.000000, "Escolha um modo");
-    PlayerTextDrawFont(playerid, TxdCreateCharacterModesLayout[playerid][0], TEXT_DRAW_FONT_2);
-    PlayerTextDrawLetterSize(playerid, TxdCreateCharacterModesLayout[playerid][0], 0.258332, 2.000000);
-    PlayerTextDrawTextSize(playerid, TxdCreateCharacterModesLayout[playerid][0], 400.000000, 17.000000);
-    PlayerTextDrawSetOutline(playerid, TxdCreateCharacterModesLayout[playerid][0], 0);
-    PlayerTextDrawSetShadow(playerid, TxdCreateCharacterModesLayout[playerid][0], 0);
-    PlayerTextDrawAlignment(playerid, TxdCreateCharacterModesLayout[playerid][0], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, TxdCreateCharacterModesLayout[playerid][0], -1);
-    PlayerTextDrawBackgroundColour(playerid, TxdCreateCharacterModesLayout[playerid][0], 255);
-    PlayerTextDrawBoxColour(playerid, TxdCreateCharacterModesLayout[playerid][0], 50);
-    PlayerTextDrawUseBox(playerid, TxdCreateCharacterModesLayout[playerid][0], false);
-    PlayerTextDrawSetProportional(playerid, TxdCreateCharacterModesLayout[playerid][0], true);
-    PlayerTextDrawSetSelectable(playerid, TxdCreateCharacterModesLayout[playerid][0], false);
-
-    TxdCreateCharacterModesLayout[playerid][1] = CreatePlayerTextDraw(playerid, 171.000000, 56.000000, "Voce deve escolher um modo para iniciar seu personagem.~n~Os modos lhe ajudaram a dar sentido a historia e nao poderao ser trocados");
-    PlayerTextDrawFont(playerid, TxdCreateCharacterModesLayout[playerid][1], TEXT_DRAW_FONT_1);
-    PlayerTextDrawLetterSize(playerid, TxdCreateCharacterModesLayout[playerid][1], 0.237498, 1.250000);
-    PlayerTextDrawTextSize(playerid, TxdCreateCharacterModesLayout[playerid][1], 493.000000, 17.000000);
-    PlayerTextDrawSetOutline(playerid, TxdCreateCharacterModesLayout[playerid][1], 0);
-    PlayerTextDrawSetShadow(playerid, TxdCreateCharacterModesLayout[playerid][1], 0);
-    PlayerTextDrawAlignment(playerid, TxdCreateCharacterModesLayout[playerid][1], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, TxdCreateCharacterModesLayout[playerid][1], -1);
-    PlayerTextDrawBackgroundColour(playerid, TxdCreateCharacterModesLayout[playerid][1], -1);
-    PlayerTextDrawBoxColour(playerid, TxdCreateCharacterModesLayout[playerid][1], 50);
-    PlayerTextDrawUseBox(playerid, TxdCreateCharacterModesLayout[playerid][1], false);
-    PlayerTextDrawSetProportional(playerid, TxdCreateCharacterModesLayout[playerid][1], true);
-    PlayerTextDrawSetSelectable(playerid, TxdCreateCharacterModesLayout[playerid][1], false);
-
-    TxdCreateCharacterModesButtonNext[playerid][0] = CreatePlayerTextDraw(playerid, 315.000000, 401.000000, "_");
-    PlayerTextDrawFont(playerid, TxdCreateCharacterModesButtonNext[playerid][0], TEXT_DRAW_FONT_1);
-    PlayerTextDrawLetterSize(playerid, TxdCreateCharacterModesButtonNext[playerid][0], 0.600000, 3.000000);
-    PlayerTextDrawTextSize(playerid, TxdCreateCharacterModesButtonNext[playerid][0], 298.500000, 117.000000);
-    PlayerTextDrawSetOutline(playerid, TxdCreateCharacterModesButtonNext[playerid][0], 1);
-    PlayerTextDrawSetShadow(playerid, TxdCreateCharacterModesButtonNext[playerid][0], 0);
-    PlayerTextDrawAlignment(playerid, TxdCreateCharacterModesButtonNext[playerid][0], TEXT_DRAW_ALIGN_CENTER);
-    PlayerTextDrawColour(playerid, TxdCreateCharacterModesButtonNext[playerid][0], -1);
-    PlayerTextDrawBackgroundColour(playerid, TxdCreateCharacterModesButtonNext[playerid][0], 255);
-    PlayerTextDrawBoxColour(playerid, TxdCreateCharacterModesButtonNext[playerid][0], 505290495);
-    PlayerTextDrawUseBox(playerid, TxdCreateCharacterModesButtonNext[playerid][0], true);
-    PlayerTextDrawSetProportional(playerid, TxdCreateCharacterModesButtonNext[playerid][0], true);
-    PlayerTextDrawSetSelectable(playerid, TxdCreateCharacterModesButtonNext[playerid][0], false);
-
-    TxdCreateCharacterModesButtonNext[playerid][1] = CreatePlayerTextDraw(playerid, 289.000000, 403.000000, "Continuar");
-    PlayerTextDrawFont(playerid, TxdCreateCharacterModesButtonNext[playerid][1], TEXT_DRAW_FONT_3);
-    PlayerTextDrawLetterSize(playerid, TxdCreateCharacterModesButtonNext[playerid][1], 0.304167, 2.099997);
-    PlayerTextDrawTextSize(playerid, TxdCreateCharacterModesButtonNext[playerid][1], 400.000000, 17.000000);
-    PlayerTextDrawSetOutline(playerid, TxdCreateCharacterModesButtonNext[playerid][1], 0);
-    PlayerTextDrawSetShadow(playerid, TxdCreateCharacterModesButtonNext[playerid][1], 0);
-    PlayerTextDrawAlignment(playerid, TxdCreateCharacterModesButtonNext[playerid][1], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, TxdCreateCharacterModesButtonNext[playerid][1], 1347440895);
-    PlayerTextDrawBackgroundColour(playerid, TxdCreateCharacterModesButtonNext[playerid][1], 255);
-    PlayerTextDrawBoxColour(playerid, TxdCreateCharacterModesButtonNext[playerid][1], 50);
-    PlayerTextDrawUseBox(playerid, TxdCreateCharacterModesButtonNext[playerid][1], false);
-    PlayerTextDrawSetProportional(playerid, TxdCreateCharacterModesButtonNext[playerid][1], true);
-    PlayerTextDrawSetSelectable(playerid, TxdCreateCharacterModesButtonNext[playerid][1], false);
-
-
-    VSL_CreateTextdrawModeCharacterModes(playerid, "ld_tatt:11dice2", "Nada a Perder", "Voce meteu o louco e veio~n~la do fim do mundo para a~n~cidade grande.~n~~n~O que voce tem e R$200~n~reais no bolso e um sonho!", "LEVEL 1", "EXP: NORMAL");
-    VSL_CreateTextdrawModeCharacterModes(playerid, "ld_tatt:7mary", "Ninho Familiar", "Voce ainda mora com seus~n~pais, entao e melhor se~n~comportar ou podera ser~n~expulso.~n~~n~Pelo menos eles te deram~n~um veiculo usado que so faz~n~barulho para voce ir a~n~faculdade.", "LEVEL 4", "EXP: -20% EM PAYDAY");
-    VSL_CreateTextdrawModeCharacterModes(playerid, "ld_tatt:6clown", "Simplesmente Eu", "Voce alugou seu proprio~n~cantinho e tem um emprego~n~de meio periodo desde a~n~epoca de escola.~n~~n~Sua fiel lambreta te~n~acompanha, e lenta, mas~n~raramenta te deixa na mao.", "LEVEL 2", "EXP: -15% EM PAYDAY");
-    VSL_CreateTextdrawModeCharacterModes(playerid, "ld_tatt:12angel", "Terceira Idade", "Voce ja esta no final da vida~n~e se aposentou, sem muitas~n~obrigacoes. Tem um dinheiro~n~guardado, mas gasta~n~horrores com remedios.~n~~n~Se apegou demais ao seu~n~veiculo para pensar em trocar~n~por um novo.", "LEVEL 10", "EXP: NENHUM");
+    VSL_ShowTextdrawsIconMenuRegisterCharacterModes(playerid, index);
+    VSL_ShowTextdrawsModeRegisterCharacterModes(playerid, index);
     return 1;
 }
 
-VSL_CreateTextdrawModeCharacterModes(playerid, const sprite_name[], const mode_name[], const mode_description[], const mode_level[], const mode_exp[]) {
+PlayerTextDrawClick:OnClickModeButtonNext(playerid, params) {
 
-    new
-        index = _tempPlayerTxdCharacterModeIndex{playerid},
-        Float:box_x = 58.0 + 132.0 * index,
-        Float:sprite_x = box_x + 33.0,
-        Float:mode_name_x = box_x + 6.0,
-        Float:mode_description_x = box_x + 5.0;
-
-    TxdCreateCharacterModesBox[playerid][index] = CreatePlayerTextDraw(playerid, box_x, 101.000000, "ld_bum:blkdot");
-    PlayerTextDrawFont(playerid, TxdCreateCharacterModesBox[playerid][index], TEXT_DRAW_FONT_SPRITE);
-    PlayerTextDrawLetterSize(playerid, TxdCreateCharacterModesBox[playerid][index], 0.600000, 2.000000);
-    PlayerTextDrawTextSize(playerid, TxdCreateCharacterModesBox[playerid][index], 130.000000, 253.500000);
-    PlayerTextDrawSetOutline(playerid, TxdCreateCharacterModesBox[playerid][index], 1);
-    PlayerTextDrawSetShadow(playerid, TxdCreateCharacterModesBox[playerid][index], 0);
-    PlayerTextDrawAlignment(playerid, TxdCreateCharacterModesBox[playerid][index], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, TxdCreateCharacterModesBox[playerid][index], -1);
-    PlayerTextDrawBackgroundColour(playerid, TxdCreateCharacterModesBox[playerid][index], 255);
-    PlayerTextDrawBoxColour(playerid, TxdCreateCharacterModesBox[playerid][index], 50);
-    PlayerTextDrawUseBox(playerid, TxdCreateCharacterModesBox[playerid][index], true);
-    PlayerTextDrawSetProportional(playerid, TxdCreateCharacterModesBox[playerid][index], true);
-    PlayerTextDrawSetSelectable(playerid, TxdCreateCharacterModesBox[playerid][index], true);
-
-    TxdCreateCharacterModesSprite[playerid][index] = CreatePlayerTextDraw(playerid, sprite_x, 108.000000, sprite_name);
-    PlayerTextDrawFont(playerid, TxdCreateCharacterModesSprite[playerid][index], TEXT_DRAW_FONT_SPRITE);
-    PlayerTextDrawLetterSize(playerid, TxdCreateCharacterModesSprite[playerid][index], 0.600000, 2.000000);
-    PlayerTextDrawTextSize(playerid, TxdCreateCharacterModesSprite[playerid][index], 55.000000, 55.000000);
-    PlayerTextDrawSetOutline(playerid, TxdCreateCharacterModesSprite[playerid][index], 2);
-    PlayerTextDrawSetShadow(playerid, TxdCreateCharacterModesSprite[playerid][index], 0);
-    PlayerTextDrawAlignment(playerid, TxdCreateCharacterModesSprite[playerid][index], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, TxdCreateCharacterModesSprite[playerid][index], -1);
-    PlayerTextDrawBackgroundColour(playerid, TxdCreateCharacterModesSprite[playerid][index], -16776961);
-    PlayerTextDrawBoxColour(playerid, TxdCreateCharacterModesSprite[playerid][index], -16777166);
-    PlayerTextDrawUseBox(playerid, TxdCreateCharacterModesSprite[playerid][index], true);
-    PlayerTextDrawSetProportional(playerid, TxdCreateCharacterModesSprite[playerid][index], true);
-    PlayerTextDrawSetSelectable(playerid, TxdCreateCharacterModesSprite[playerid][index], false);
-
-    TxdCreateCharacterModesName[playerid][index] = CreatePlayerTextDraw(playerid, mode_name_x, 170.000000, mode_name);
-    PlayerTextDrawFont(playerid, TxdCreateCharacterModesName[playerid][index], TEXT_DRAW_FONT_3);
-    PlayerTextDrawLetterSize(playerid, TxdCreateCharacterModesName[playerid][index], 0.304167, 2.099997);
-    PlayerTextDrawTextSize(playerid, TxdCreateCharacterModesName[playerid][index], 543.500000, 17.000000);
-    PlayerTextDrawSetOutline(playerid, TxdCreateCharacterModesName[playerid][index], 0);
-    PlayerTextDrawSetShadow(playerid, TxdCreateCharacterModesName[playerid][index], 0);
-    PlayerTextDrawAlignment(playerid, TxdCreateCharacterModesName[playerid][index], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, TxdCreateCharacterModesName[playerid][index], 255);
-    PlayerTextDrawBackgroundColour(playerid, TxdCreateCharacterModesName[playerid][index], 255);
-    PlayerTextDrawBoxColour(playerid, TxdCreateCharacterModesName[playerid][index], 50);
-    PlayerTextDrawUseBox(playerid, TxdCreateCharacterModesName[playerid][index], false);
-    PlayerTextDrawSetProportional(playerid, TxdCreateCharacterModesName[playerid][index], true);
-    PlayerTextDrawSetSelectable(playerid, TxdCreateCharacterModesName[playerid][index], false);
-
-    TxdCreateCharacterModesDescription[playerid][index] = CreatePlayerTextDraw(playerid, mode_description_x, 196.000000, mode_description);
-    PlayerTextDrawFont(playerid, TxdCreateCharacterModesDescription[playerid][index], TEXT_DRAW_FONT_1);
-    PlayerTextDrawLetterSize(playerid, TxdCreateCharacterModesDescription[playerid][index], 0.258332, 1.500000);
-    PlayerTextDrawTextSize(playerid, TxdCreateCharacterModesDescription[playerid][index], 630.500000, 17.000000);
-    PlayerTextDrawSetOutline(playerid, TxdCreateCharacterModesDescription[playerid][index], 0);
-    PlayerTextDrawSetShadow(playerid, TxdCreateCharacterModesDescription[playerid][index], 0);
-    PlayerTextDrawAlignment(playerid, TxdCreateCharacterModesDescription[playerid][index], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, TxdCreateCharacterModesDescription[playerid][index], 255);
-    PlayerTextDrawBackgroundColour(playerid, TxdCreateCharacterModesDescription[playerid][index], -1);
-    PlayerTextDrawBoxColour(playerid, TxdCreateCharacterModesDescription[playerid][index], 50);
-    PlayerTextDrawUseBox(playerid, TxdCreateCharacterModesDescription[playerid][index], false);
-    PlayerTextDrawSetProportional(playerid, TxdCreateCharacterModesDescription[playerid][index], true);
-    PlayerTextDrawSetSelectable(playerid, TxdCreateCharacterModesDescription[playerid][index], false);
-
-    TxdCreateCharacterModesLevel[playerid][index] = CreatePlayerTextDraw(playerid, mode_description_x, 320.000000, mode_level);
-    PlayerTextDrawFont(playerid, TxdCreateCharacterModesLevel[playerid][index], TEXT_DRAW_FONT_2);
-    PlayerTextDrawLetterSize(playerid, TxdCreateCharacterModesLevel[playerid][index], 0.174998, 1.599997);
-    PlayerTextDrawTextSize(playerid, TxdCreateCharacterModesLevel[playerid][index], 504.000000, 17.000000);
-    PlayerTextDrawSetOutline(playerid, TxdCreateCharacterModesLevel[playerid][index], 0);
-    PlayerTextDrawSetShadow(playerid, TxdCreateCharacterModesLevel[playerid][index], 0);
-    PlayerTextDrawAlignment(playerid, TxdCreateCharacterModesLevel[playerid][index], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, TxdCreateCharacterModesLevel[playerid][index], 255);
-    PlayerTextDrawBackgroundColour(playerid, TxdCreateCharacterModesLevel[playerid][index], -1);
-    PlayerTextDrawBoxColour(playerid, TxdCreateCharacterModesLevel[playerid][index], 50);
-    PlayerTextDrawUseBox(playerid, TxdCreateCharacterModesLevel[playerid][index], false);
-    PlayerTextDrawSetProportional(playerid, TxdCreateCharacterModesLevel[playerid][index], true);
-    PlayerTextDrawSetSelectable(playerid, TxdCreateCharacterModesLevel[playerid][index], false);
-
-    TxdCreateCharacterModesExp[playerid][index] = CreatePlayerTextDraw(playerid, mode_description_x, 336.000000, mode_exp);
-    PlayerTextDrawFont(playerid, TxdCreateCharacterModesExp[playerid][index], TEXT_DRAW_FONT_2);
-    PlayerTextDrawLetterSize(playerid, TxdCreateCharacterModesExp[playerid][index], 0.174998, 1.599997);
-    PlayerTextDrawTextSize(playerid, TxdCreateCharacterModesExp[playerid][index], 541.500000, 17.000000);
-    PlayerTextDrawSetOutline(playerid, TxdCreateCharacterModesExp[playerid][index], 0);
-    PlayerTextDrawSetShadow(playerid, TxdCreateCharacterModesExp[playerid][index], 0);
-    PlayerTextDrawAlignment(playerid, TxdCreateCharacterModesExp[playerid][index], TEXT_DRAW_ALIGN_LEFT);
-    PlayerTextDrawColour(playerid, TxdCreateCharacterModesExp[playerid][index], 255);
-    PlayerTextDrawBackgroundColour(playerid, TxdCreateCharacterModesExp[playerid][index], -1);
-    PlayerTextDrawBoxColour(playerid, TxdCreateCharacterModesExp[playerid][index], 50);
-    PlayerTextDrawUseBox(playerid, TxdCreateCharacterModesExp[playerid][index], false);
-    PlayerTextDrawSetProportional(playerid, TxdCreateCharacterModesExp[playerid][index], true);
-    PlayerTextDrawSetSelectable(playerid, TxdCreateCharacterModesExp[playerid][index], false);
-
-    _tempPlayerTxdCharacterModeIndex{playerid} ++;
-    return 1;
-}
-
-VSL_ShowTextdrawsModeCharacterModes(playerid) {
-
-    for (new txd = 0; txd < 2; txd++) {
-
-        PlayerTextDrawShow(playerid, TxdCreateCharacterModesLayout[playerid][txd]);
-        PlayerTextDrawShow(playerid, TxdCreateCharacterModesButtonNext[playerid][txd]);
-    }
-
-    for (new txd = 0; txd < 4; txd++) {
-
-        PlayerTextDrawShow(playerid, TxdCreateCharacterModesBox[playerid][txd]);
-        PlayerTextDrawShow(playerid, TxdCreateCharacterModesSprite[playerid][txd]);
-        PlayerTextDrawShow(playerid, TxdCreateCharacterModesName[playerid][txd]);
-        PlayerTextDrawShow(playerid, TxdCreateCharacterModesDescription[playerid][txd]);
-        PlayerTextDrawShow(playerid, TxdCreateCharacterModesLevel[playerid][txd]);
-        PlayerTextDrawShow(playerid, TxdCreateCharacterModesExp[playerid][txd]);
-    }
-
-    SelectTextDraw(playerid, 0xFAFAFAFF);
-    return 1;
-}
-
-VSL_UpdateTextdrawsBoxModeCharacterModes(playerid, index) {
-
-    new
-        index_old = tempPlayerCharacterModeId{playerid} - 1;
-
-    if (tempPlayerCharacterModeId{playerid}) {
-
-        PlayerTextDrawColour(playerid, TxdCreateCharacterModesBox[playerid][index_old], -1);
-        PlayerTextDrawColour(playerid, TxdCreateCharacterModesSprite[playerid][index_old], -1);
-        PlayerTextDrawColour(playerid, TxdCreateCharacterModesName[playerid][index_old], 255);
-        PlayerTextDrawColour(playerid, TxdCreateCharacterModesDescription[playerid][index_old], 255);
-        PlayerTextDrawColour(playerid, TxdCreateCharacterModesLevel[playerid][index_old], 255);
-        PlayerTextDrawColour(playerid, TxdCreateCharacterModesExp[playerid][index_old], 255);
-
-        PlayerTextDrawSetSelectable(playerid, TxdCreateCharacterModesBox[playerid][index_old], true);
-        
-        PlayerTextDrawShow(playerid, TxdCreateCharacterModesSprite[playerid][index_old]);
-        PlayerTextDrawShow(playerid, TxdCreateCharacterModesName[playerid][index_old]);
-        PlayerTextDrawShow(playerid, TxdCreateCharacterModesDescription[playerid][index_old]);
-        PlayerTextDrawShow(playerid, TxdCreateCharacterModesLevel[playerid][index_old]);
-        PlayerTextDrawShow(playerid, TxdCreateCharacterModesExp[playerid][index_old]);
-        PlayerTextDrawShow(playerid, TxdCreateCharacterModesBox[playerid][index_old]);
-    }
-
-    PlayerTextDrawColour(playerid, TxdCreateCharacterModesBox[playerid][index], 1747094527);
-    PlayerTextDrawColour(playerid, TxdCreateCharacterModesSprite[playerid][index], 1747094527);
-    PlayerTextDrawColour(playerid, TxdCreateCharacterModesName[playerid][index], -1);
-    PlayerTextDrawColour(playerid, TxdCreateCharacterModesDescription[playerid][index], -1);
-    PlayerTextDrawColour(playerid, TxdCreateCharacterModesLevel[playerid][index], -1);
-    PlayerTextDrawColour(playerid, TxdCreateCharacterModesExp[playerid][index], -1);
+    // new
+    //     E_CHARACTER_MODES:character_mode;
     
-    PlayerTextDrawSetSelectable(playerid, TxdCreateCharacterModesBox[playerid][index], false);
+    if (m_playerModeIndexSelected[playerid] == 255)
+        return 1;
 
-    PlayerTextDrawShow(playerid, TxdCreateCharacterModesSprite[playerid][index]);
-    PlayerTextDrawShow(playerid, TxdCreateCharacterModesName[playerid][index]);
-    PlayerTextDrawShow(playerid, TxdCreateCharacterModesDescription[playerid][index]);
-    PlayerTextDrawShow(playerid, TxdCreateCharacterModesLevel[playerid][index]);
-    PlayerTextDrawShow(playerid, TxdCreateCharacterModesExp[playerid][index]);
-    PlayerTextDrawShow(playerid, TxdCreateCharacterModesBox[playerid][index]);
+    // switch (m_playerModeIndexSelected[playerid]) {
+
+    //     case 0: character_mode = MODE_NOTHING_TO_LOSE;
+    //     case 1: character_mode = MODE_FAMILY_NEST;
+    //     case 2: character_mode = MODE_SIMPLY_ME;
+    //     case 3: character_mode = MODE_ELDERLY_PEOPLE;
+    // }
+
+    PlayerTextDrawBoxColour(playerid, m_screenButtonNext[playerid][0], -1724724069);
+    PlayerTextDrawColour(playerid, m_screenButtonNext[playerid][1], -101);
+    PlayerTextDrawSetSelectable(playerid, m_screenButtonNext[playerid][1], false);
+
+    for (new txd = 0; txd < 2; txd++) {
+        PlayerTextDrawShow(playerid, m_screenButtonNext[playerid][txd]);
+    }
+
+    CancelSelectTextDraw(playerid);
+
+    m_playerActorId = CreateActor(1, 206.6420, -228.6146, 1.7954, 192.8569);
+    
+    SetActorVirtualWorld(m_playerActorId, playerid + 1);
+    SetPlayerVirtualWorld(playerid, playerid + 1);
+
+    SetDynamicObjectMaterial(CreateDynamicObject(3095, 205.92958, -227.70790, 1.90500, 90.00000, 0.00000, 0.00000, playerid + 1, 0, playerid), 0, 19800, "LSACarPark1", "Black", 0xFFFFFFFF);
+    SetDynamicObjectMaterial(CreateDynamicObject(3095, 205.92461, -231.02800, 0.24000, 0.00000, 0.00000, 0.00000, playerid + 1, 0, playerid), 0, 19800, "LSACarPark1", "Black", 0xFFFFFFFF);
+
+    SetPlayerCameraPos(playerid, 207.064682, -231.382614, 2.647306);
+    SetPlayerCameraLookAt(playerid, 206.207565, -226.539779, 1.746010);
+
+    inline OnDestroyScreen() {
+
+        VSL_DestroyTextdrawsRegisterCharacterModes(playerid);
+        SHARED_DestroyTextdrawsLoginSpritesBackground(playerid);
+    }
+
+    Timer_CreateCallback(using inline OnDestroyScreen, 2000, 1);
+
+    inline OnCreateScreen() {
+
+        SHARED_DestroyTextdrawLoginBoxBackground(playerid);
+
+        InterpolateCameraPos(playerid, 207.064682, -231.382614, 2.647306, 206.985504, -230.935119, 2.564025, 3000, CAMERA_MOVE);
+        InterpolateCameraLookAt(playerid, 206.207565, -226.539779, 1.746010, 206.128387, -226.092285, 1.662729, 3000, CAMERA_MOVE);
+    }
+
+    Timer_CreateCallback(using inline OnCreateScreen, 4000, 1);
+
+    inline OnShowAboutMenu() {
+
+        SetPlayerCharacterSelected(playerid, 0);
+
+        VSL_CreateTextdrawsCreateCharacterMainMenu(playerid);
+
+        VSL_CreateTextdrawsCreateCharacterAboutMenu(playerid);
+        VSL_ShowTextdrawsCreateCharacterAboutMenu(playerid, false);
+    }
+
+    Timer_CreateCallback(using inline OnShowAboutMenu, 6000, 1);
     return 1;
 }
 
-VSL_DestroyTextdrawsModeCharacterModes(playerid) {
+
+/*======================================================================================================================
+                        _  _     _____                 _   _             _         _  _   
+                      _| || |_  |  ___|   _ _ __   ___| |_(_) ___  _ __ ( )___   _| || |_ 
+                     |_  ..  _| | |_ | | | | '_ \ / __| __| |/ _ \| '_ \|// __| |_  ..  _|
+                     |_      _| |  _|| |_| | | | | (__| |_| | (_) | | | | \__ \ |_      _|
+                       |_||_|   |_|   \__,_|_| |_|\___|\__|_|\___/|_| |_| |___/   |_||_|  
+
+======================================================================================================================*/
+
+VSL_CreateTextdrawsRegisterCharacterModes(playerid) {
+
+    m_screenLayout[playerid][0] = CreatePlayerTextDraw(playerid, 203.000000, 57.000000, "Voce deve escolher um modo para iniciar seu personagem.~n~Os modos lhe ajudaram a dar sentido a historia e nao poderao ser troca");
+    PlayerTextDrawFont(playerid, m_screenLayout[playerid][0], TEXT_DRAW_FONT_3);
+    PlayerTextDrawLetterSize(playerid, m_screenLayout[playerid][0], 0.220833, 1.449998);
+    PlayerTextDrawTextSize(playerid, m_screenLayout[playerid][0], 660.500000, 147.000000);
+    PlayerTextDrawSetOutline(playerid, m_screenLayout[playerid][0], 0);
+    PlayerTextDrawSetShadow(playerid, m_screenLayout[playerid][0], 0);
+    PlayerTextDrawAlignment(playerid, m_screenLayout[playerid][0], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, m_screenLayout[playerid][0], -1);
+    PlayerTextDrawBackgroundColour(playerid, m_screenLayout[playerid][0], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenLayout[playerid][0], 50);
+    PlayerTextDrawUseBox(playerid, m_screenLayout[playerid][0], false);
+    PlayerTextDrawSetProportional(playerid, m_screenLayout[playerid][0], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenLayout[playerid][0], false);
+
+    m_screenLayout[playerid][1] = CreatePlayerTextDraw(playerid, 507.000000, 136.000000, "_");
+    PlayerTextDrawFont(playerid, m_screenLayout[playerid][1], TEXT_DRAW_FONT_2);
+    PlayerTextDrawLetterSize(playerid, m_screenLayout[playerid][1], 0.600000, 23.400024);
+    PlayerTextDrawTextSize(playerid, m_screenLayout[playerid][1], 299.500000, 264.000000);
+    PlayerTextDrawSetOutline(playerid, m_screenLayout[playerid][1], 1);
+    PlayerTextDrawSetShadow(playerid, m_screenLayout[playerid][1], 0);
+    PlayerTextDrawAlignment(playerid, m_screenLayout[playerid][1], TEXT_DRAW_ALIGN_CENTER);
+    PlayerTextDrawColour(playerid, m_screenLayout[playerid][1], -1724723969);
+    PlayerTextDrawBackgroundColour(playerid, m_screenLayout[playerid][1], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenLayout[playerid][1], 0x0A0A0AFF);
+    PlayerTextDrawUseBox(playerid, m_screenLayout[playerid][1], true);
+    PlayerTextDrawSetProportional(playerid, m_screenLayout[playerid][1], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenLayout[playerid][1], false);
+
+
+
+    m_screenMenuOptionBox[playerid] = CreatePlayerTextDraw(playerid, 110.000000, 176.000000, "_");
+    PlayerTextDrawFont(playerid, m_screenMenuOptionBox[playerid], TEXT_DRAW_FONT_1);
+    PlayerTextDrawLetterSize(playerid, m_screenMenuOptionBox[playerid], 0.600000, 1.550009);
+    PlayerTextDrawTextSize(playerid, m_screenMenuOptionBox[playerid], 299.500000, 100.000000);
+    PlayerTextDrawSetOutline(playerid, m_screenMenuOptionBox[playerid], 1);
+    PlayerTextDrawSetShadow(playerid, m_screenMenuOptionBox[playerid], 0);
+    PlayerTextDrawAlignment(playerid, m_screenMenuOptionBox[playerid], TEXT_DRAW_ALIGN_CENTER);
+    PlayerTextDrawColour(playerid, m_screenMenuOptionBox[playerid], -1724723969);
+    PlayerTextDrawBackgroundColour(playerid, m_screenMenuOptionBox[playerid], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenMenuOptionBox[playerid], -1724723969);
+    PlayerTextDrawUseBox(playerid, m_screenMenuOptionBox[playerid], true);
+    PlayerTextDrawSetProportional(playerid, m_screenMenuOptionBox[playerid], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenMenuOptionBox[playerid], false);
+
+    m_screenMenuOptionIcon[playerid] = CreatePlayerTextDraw(playerid, 60.000000, 172.000000, "ld_tatt:11dice2");
+    PlayerTextDrawFont(playerid, m_screenMenuOptionIcon[playerid], TEXT_DRAW_FONT_SPRITE);
+    PlayerTextDrawLetterSize(playerid, m_screenMenuOptionIcon[playerid], 0.600000, 2.000000);
+    PlayerTextDrawTextSize(playerid, m_screenMenuOptionIcon[playerid], 22.000000, 22.000000);
+    PlayerTextDrawSetOutline(playerid, m_screenMenuOptionIcon[playerid], 1);
+    PlayerTextDrawSetShadow(playerid, m_screenMenuOptionIcon[playerid], 0);
+    PlayerTextDrawAlignment(playerid, m_screenMenuOptionIcon[playerid], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, m_screenMenuOptionIcon[playerid], -1724723969);
+    PlayerTextDrawBackgroundColour(playerid, m_screenMenuOptionIcon[playerid], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenMenuOptionIcon[playerid], 50);
+    PlayerTextDrawUseBox(playerid, m_screenMenuOptionIcon[playerid], true);
+    PlayerTextDrawSetProportional(playerid, m_screenMenuOptionIcon[playerid], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenMenuOptionIcon[playerid], false);
+
+
+
+    m_screenMenuOptions[playerid][0] = CreatePlayerTextDraw(playerid, 86.000000, 177.000000, "Nada a Perder");
+    PlayerTextDrawFont(playerid, m_screenMenuOptions[playerid][0], TEXT_DRAW_FONT_3);
+    PlayerTextDrawLetterSize(playerid, m_screenMenuOptions[playerid][0], 0.204162, 1.299998);
+    PlayerTextDrawTextSize(playerid, m_screenMenuOptions[playerid][0], 136.000000, 10.000000);
+    PlayerTextDrawSetOutline(playerid, m_screenMenuOptions[playerid][0], 0);
+    PlayerTextDrawSetShadow(playerid, m_screenMenuOptions[playerid][0], 0);
+    PlayerTextDrawAlignment(playerid, m_screenMenuOptions[playerid][0], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, m_screenMenuOptions[playerid][0], -1); // 1296911871
+    PlayerTextDrawBackgroundColour(playerid, m_screenMenuOptions[playerid][0], -1);
+    PlayerTextDrawBoxColour(playerid, m_screenMenuOptions[playerid][0], 50);
+    PlayerTextDrawUseBox(playerid, m_screenMenuOptions[playerid][0], false);
+    PlayerTextDrawSetProportional(playerid, m_screenMenuOptions[playerid][0], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenMenuOptions[playerid][0], true);
+
+    m_screenMenuOptions[playerid][1] = CreatePlayerTextDraw(playerid, 86.000000, 206.000000, "Ninho familiar");
+    PlayerTextDrawFont(playerid, m_screenMenuOptions[playerid][1], TEXT_DRAW_FONT_3);
+    PlayerTextDrawLetterSize(playerid, m_screenMenuOptions[playerid][1], 0.204162, 1.299998);
+    PlayerTextDrawTextSize(playerid, m_screenMenuOptions[playerid][1], 134.000000, 10.000000);
+    PlayerTextDrawSetOutline(playerid, m_screenMenuOptions[playerid][1], 0);
+    PlayerTextDrawSetShadow(playerid, m_screenMenuOptions[playerid][1], 0);
+    PlayerTextDrawAlignment(playerid, m_screenMenuOptions[playerid][1], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, m_screenMenuOptions[playerid][1], -1);
+    PlayerTextDrawBackgroundColour(playerid, m_screenMenuOptions[playerid][1], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenMenuOptions[playerid][1], 1296911666);
+    PlayerTextDrawUseBox(playerid, m_screenMenuOptions[playerid][1], false);
+    PlayerTextDrawSetProportional(playerid, m_screenMenuOptions[playerid][1], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenMenuOptions[playerid][1], true);
+
+    m_screenMenuOptions[playerid][2] = CreatePlayerTextDraw(playerid, 86.000000, 235.000000, "Simplesmente Eu");
+    PlayerTextDrawFont(playerid, m_screenMenuOptions[playerid][2], TEXT_DRAW_FONT_3);
+    PlayerTextDrawLetterSize(playerid, m_screenMenuOptions[playerid][2], 0.204162, 1.299998);
+    PlayerTextDrawTextSize(playerid, m_screenMenuOptions[playerid][2], 145.000000, 10.000000);
+    PlayerTextDrawSetOutline(playerid, m_screenMenuOptions[playerid][2], 0);
+    PlayerTextDrawSetShadow(playerid, m_screenMenuOptions[playerid][2], 0);
+    PlayerTextDrawAlignment(playerid, m_screenMenuOptions[playerid][2], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, m_screenMenuOptions[playerid][2], -1);
+    PlayerTextDrawBackgroundColour(playerid, m_screenMenuOptions[playerid][2], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenMenuOptions[playerid][2], 50);
+    PlayerTextDrawUseBox(playerid, m_screenMenuOptions[playerid][2], false);
+    PlayerTextDrawSetProportional(playerid, m_screenMenuOptions[playerid][2], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenMenuOptions[playerid][2], true);
+
+    m_screenMenuOptions[playerid][3] = CreatePlayerTextDraw(playerid, 86.000000, 264.000000, "Terceira Idade");
+    PlayerTextDrawFont(playerid, m_screenMenuOptions[playerid][3], TEXT_DRAW_FONT_3);
+    PlayerTextDrawLetterSize(playerid, m_screenMenuOptions[playerid][3], 0.204162, 1.299998);
+    PlayerTextDrawTextSize(playerid, m_screenMenuOptions[playerid][3], 136.500000, 10.000000);
+    PlayerTextDrawSetOutline(playerid, m_screenMenuOptions[playerid][3], 0);
+    PlayerTextDrawSetShadow(playerid, m_screenMenuOptions[playerid][3], 0);
+    PlayerTextDrawAlignment(playerid, m_screenMenuOptions[playerid][3], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, m_screenMenuOptions[playerid][3], -1);
+    PlayerTextDrawBackgroundColour(playerid, m_screenMenuOptions[playerid][3], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenMenuOptions[playerid][3], 50);
+    PlayerTextDrawUseBox(playerid, m_screenMenuOptions[playerid][3], false);
+    PlayerTextDrawSetProportional(playerid, m_screenMenuOptions[playerid][3], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenMenuOptions[playerid][3], true);
+
+
+
+    m_screenModeName[playerid] = CreatePlayerTextDraw(playerid, 402.000000, 171.000000, "Nada a Perder");
+    PlayerTextDrawFont(playerid, m_screenModeName[playerid], TEXT_DRAW_FONT_3);
+    PlayerTextDrawLetterSize(playerid, m_screenModeName[playerid], 0.245829, 1.700000);
+    PlayerTextDrawTextSize(playerid, m_screenModeName[playerid], 486.500000, 17.500000);
+    PlayerTextDrawSetOutline(playerid, m_screenModeName[playerid], 0);
+    PlayerTextDrawSetShadow(playerid, m_screenModeName[playerid], 0);
+    PlayerTextDrawAlignment(playerid, m_screenModeName[playerid], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, m_screenModeName[playerid], -1724723969);
+    PlayerTextDrawBackgroundColour(playerid, m_screenModeName[playerid], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenModeName[playerid], 50);
+    PlayerTextDrawUseBox(playerid, m_screenModeName[playerid], false);
+    PlayerTextDrawSetProportional(playerid, m_screenModeName[playerid], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenModeName[playerid], false);
+
+    m_screenModeDescription[playerid] = CreatePlayerTextDraw(playerid, 402.000000, 197.000000, "_");
+    PlayerTextDrawFont(playerid, m_screenModeDescription[playerid], TEXT_DRAW_FONT_3);
+    PlayerTextDrawLetterSize(playerid, m_screenModeDescription[playerid], 0.204162, 1.250000);
+    PlayerTextDrawTextSize(playerid, m_screenModeDescription[playerid], 560.000000, 17.000000);
+    PlayerTextDrawSetOutline(playerid, m_screenModeDescription[playerid], 0);
+    PlayerTextDrawSetShadow(playerid, m_screenModeDescription[playerid], 0);
+    PlayerTextDrawAlignment(playerid, m_screenModeDescription[playerid], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, m_screenModeDescription[playerid], -1);
+    PlayerTextDrawBackgroundColour(playerid, m_screenModeDescription[playerid], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenModeDescription[playerid], 50);
+    PlayerTextDrawUseBox(playerid, m_screenModeDescription[playerid], false);
+    PlayerTextDrawSetProportional(playerid, m_screenModeDescription[playerid], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenModeDescription[playerid], false);
+
+    m_screenModeStats[playerid] = CreatePlayerTextDraw(playerid, 402.000000, 239.000000, "_");
+    PlayerTextDrawFont(playerid, m_screenModeStats[playerid], TEXT_DRAW_FONT_3);
+    PlayerTextDrawLetterSize(playerid, m_screenModeStats[playerid], 0.204162, 1.250000);
+    PlayerTextDrawTextSize(playerid, m_screenModeStats[playerid], 560.000000, 17.000000);
+    PlayerTextDrawSetOutline(playerid, m_screenModeStats[playerid], 0);
+    PlayerTextDrawSetShadow(playerid, m_screenModeStats[playerid], 0);
+    PlayerTextDrawAlignment(playerid, m_screenModeStats[playerid], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, m_screenModeStats[playerid], -1);
+    PlayerTextDrawBackgroundColour(playerid, m_screenModeStats[playerid], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenModeStats[playerid], 50);
+    PlayerTextDrawUseBox(playerid, m_screenModeStats[playerid], false);
+    PlayerTextDrawSetProportional(playerid, m_screenModeStats[playerid], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenModeStats[playerid], false);
+
+
+
+    m_screenButtonNext[playerid][0] = CreatePlayerTextDraw(playerid, 512.000000, 320.000000, "_");
+    PlayerTextDrawFont(playerid, m_screenButtonNext[playerid][0], TEXT_DRAW_FONT_1);
+    PlayerTextDrawLetterSize(playerid, m_screenButtonNext[playerid][0], 0.600000, 1.150009);
+    PlayerTextDrawTextSize(playerid, m_screenButtonNext[playerid][0], 299.500000, 62.000000);
+    PlayerTextDrawSetOutline(playerid, m_screenButtonNext[playerid][0], true);
+    PlayerTextDrawSetShadow(playerid, m_screenButtonNext[playerid][0], false);
+    PlayerTextDrawAlignment(playerid, m_screenButtonNext[playerid][0], TEXT_DRAW_ALIGN_CENTER);
+    PlayerTextDrawColour(playerid, m_screenButtonNext[playerid][0], -1);
+    PlayerTextDrawBackgroundColour(playerid, m_screenButtonNext[playerid][0], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenButtonNext[playerid][0], -1724723969);
+    PlayerTextDrawUseBox(playerid, m_screenButtonNext[playerid][0], true);
+    PlayerTextDrawSetProportional(playerid, m_screenButtonNext[playerid][0], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenButtonNext[playerid][0], false);
+
+    m_screenButtonNext[playerid][1] = CreatePlayerTextDraw(playerid, 495.000000, 319.000000, "Continuar");
+    PlayerTextDrawFont(playerid, m_screenButtonNext[playerid][1], TEXT_DRAW_FONT_3);
+    PlayerTextDrawLetterSize(playerid, m_screenButtonNext[playerid][1], 0.204162, 1.299998);
+    PlayerTextDrawTextSize(playerid, m_screenButtonNext[playerid][1], 529.000000, 10.000000);
+    PlayerTextDrawSetOutline(playerid, m_screenButtonNext[playerid][1], false);
+    PlayerTextDrawSetShadow(playerid, m_screenButtonNext[playerid][1], false);
+    PlayerTextDrawAlignment(playerid, m_screenButtonNext[playerid][1], TEXT_DRAW_ALIGN_LEFT);
+    PlayerTextDrawColour(playerid, m_screenButtonNext[playerid][1], -1);
+    PlayerTextDrawBackgroundColour(playerid, m_screenButtonNext[playerid][1], 255);
+    PlayerTextDrawBoxColour(playerid, m_screenButtonNext[playerid][1], 255);
+    PlayerTextDrawUseBox(playerid, m_screenButtonNext[playerid][1], false);
+    PlayerTextDrawSetProportional(playerid, m_screenButtonNext[playerid][1], true);
+    PlayerTextDrawSetSelectable(playerid, m_screenButtonNext[playerid][1], true);
+
+
+    for (new i = 0; i < 4; i++) {
+        PlayerTextDrawSetClick(playerid, "OnClickModeOptions", m_screenMenuOptions[playerid][i], i);
+    }
+
+    PlayerTextDrawSetClick(playerid, "OnClickModeButtonNext", m_screenButtonNext[playerid][1]);
+    return 1;
+}
+
+VSL_ShowTextdrawsRegisterCharacterModes(playerid) {
+
+    PlayerTextDrawShow(playerid, m_screenLayout[playerid][0]);
+
+    for (new txd = 0; txd < 4; txd++) {
+        PlayerTextDrawShow(playerid, m_screenMenuOptions[playerid][txd]);
+    }
+
+    SelectTextDraw(playerid, 0x7E57C2FF);
+    return 1;
+}
+
+VSL_DestroyTextdrawsRegisterCharacterModes(playerid) {
+
+    PlayerTextDrawDestroy(playerid, m_screenMenuOptionIcon[playerid]);
+    m_screenMenuOptionIcon[playerid] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+
+    PlayerTextDrawDestroy(playerid, m_screenMenuOptionBox[playerid]);
+    m_screenMenuOptionBox[playerid] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+
+    PlayerTextDrawDestroy(playerid, m_screenModeName[playerid]);
+    m_screenModeName[playerid] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+
+    PlayerTextDrawDestroy(playerid, m_screenModeDescription[playerid]);
+    m_screenModeDescription[playerid] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+
+    PlayerTextDrawDestroy(playerid, m_screenModeStats[playerid]);
+    m_screenModeStats[playerid] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
 
     for (new txd = 0; txd < 2; txd++) {
 
-        PlayerTextDrawDestroy(playerid, TxdCreateCharacterModesLayout[playerid][txd]);
-        PlayerTextDrawDestroy(playerid, TxdCreateCharacterModesButtonNext[playerid][txd]);
+        PlayerTextDrawDestroy(playerid, m_screenLayout[playerid][txd]);
+        m_screenLayout[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
 
-        TxdCreateCharacterModesLayout[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
-        TxdCreateCharacterModesButtonNext[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+        PlayerTextDrawDestroy(playerid, m_screenButtonNext[playerid][txd]);
+        m_screenButtonNext[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
     }
 
     for (new txd = 0; txd < 4; txd++) {
 
-        PlayerTextDrawDestroy(playerid, TxdCreateCharacterModesBox[playerid][txd]);
-        PlayerTextDrawDestroy(playerid, TxdCreateCharacterModesSprite[playerid][txd]);
-        PlayerTextDrawDestroy(playerid, TxdCreateCharacterModesName[playerid][txd]);
-        PlayerTextDrawDestroy(playerid, TxdCreateCharacterModesDescription[playerid][txd]);
-        PlayerTextDrawDestroy(playerid, TxdCreateCharacterModesLevel[playerid][txd]);
-        PlayerTextDrawDestroy(playerid, TxdCreateCharacterModesExp[playerid][txd]);
-
-        TxdCreateCharacterModesBox[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
-        TxdCreateCharacterModesSprite[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
-        TxdCreateCharacterModesName[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
-        TxdCreateCharacterModesDescription[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
-        TxdCreateCharacterModesLevel[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
-        TxdCreateCharacterModesExp[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
+        PlayerTextDrawDestroy(playerid, m_screenMenuOptions[playerid][txd]);
+        m_screenMenuOptions[playerid][txd] = PlayerText:INVALID_PLAYER_TEXT_DRAW;
     }
 
     CancelSelectTextDraw(playerid);
     return 1;
+}
+
+
+VSL_ShowTextdrawsIconMenuRegisterCharacterModes(playerid, index) {
+
+    new
+        Float:pos_x,
+        Float:pos_y
+    ;
+
+    switch (index) {
+
+        case 0: PlayerTextDrawSetString(playerid, m_screenMenuOptionIcon[playerid], "ld_tatt:11dice2");
+        case 1: PlayerTextDrawSetString(playerid, m_screenMenuOptionIcon[playerid], "ld_tatt:7mary");
+        case 2: PlayerTextDrawSetString(playerid, m_screenMenuOptionIcon[playerid], "ld_tatt:6clown");
+        case 3: PlayerTextDrawSetString(playerid, m_screenMenuOptionIcon[playerid], "ld_tatt:12angel");
+    }
+
+    PlayerTextDrawGetPos(playerid, m_screenMenuOptions[playerid][index], pos_x, pos_y);
+
+    PlayerTextDrawSetPos(playerid, m_screenMenuOptionBox[playerid], 110.0, pos_y - 1.0);
+    PlayerTextDrawSetPos(playerid, m_screenMenuOptionIcon[playerid], 60.0, pos_y - 5.0);
+
+    PlayerTextDrawShow(playerid, m_screenMenuOptionBox[playerid]);
+    PlayerTextDrawShow(playerid, m_screenMenuOptionIcon[playerid]);
+    return 1;
+}
+
+VSL_ShowTextdrawsModeRegisterCharacterModes(playerid, index) {
+
+    PlayerTextDrawShow(playerid, m_screenLayout[playerid][1]);
+
+    if (m_playerModeIndexSelected{playerid} != 255) {
+
+        PlayerTextDrawSetSelectable(playerid, m_screenMenuOptions[playerid][m_playerModeIndexSelected{playerid}], true);
+        PlayerTextDrawShow(playerid, m_screenMenuOptions[playerid][m_playerModeIndexSelected{playerid}]);
+    }
+
+    PlayerTextDrawColour(playerid, m_screenMenuOptions[playerid][index], -1);
+    PlayerTextDrawSetSelectable(playerid, m_screenMenuOptions[playerid][index], false);
+    PlayerTextDrawShow(playerid, m_screenMenuOptions[playerid][index]);
+
+    PlayerTextDrawSetString(playerid, m_screenModeName[playerid], VSL_GetNameModeRegisterCharacterModes(index));
+    PlayerTextDrawShow(playerid, m_screenModeName[playerid]);
+
+    PlayerTextDrawSetString(playerid, m_screenModeDescription[playerid], VSL_GetDescModeRegisterCharacterModes(index));
+    PlayerTextDrawShow(playerid, m_screenModeDescription[playerid]);
+
+    if (!IsPlayerTextDrawVisible(playerid, m_screenButtonNext[playerid][0])) {
+
+        for (new txd = 0; txd < 2; txd++) {
+            PlayerTextDrawShow(playerid, m_screenButtonNext[playerid][txd]);
+        }
+    }
+
+    m_playerModeIndexSelected{playerid} = index;
+    return 1;
+}
+
+VSL_GetNameModeRegisterCharacterModes(index) {
+
+    new
+        mode_name[16];
+
+    switch (index) {
+
+        case 0: strcat(mode_name, "Nada a Perder");
+        case 1: strcat(mode_name, "Ninho Familiar");
+        case 2: strcat(mode_name, "Simplesmente Eu");
+        case 3: strcat(mode_name, "Terceira Idade");
+
+        default: strcat(mode_name, "null");
+    }
+    return mode_name;
+}
+
+VSL_GetDescModeRegisterCharacterModes(index) {
+
+    new
+        mode_desc[240];
+
+    switch (index) {
+
+        case 0: strcat(mode_desc, "Voce meteu o louco e veio la do fim do mundo para a cidade grande. O que voce tem e R$200 reais no bolso e um sonho!~n~ ~n~");
+        case 1: strcat(mode_desc, "Voce ainda mora com seus pais, entao e melhor se comportar ou podera ser expulso. Pelo menos eles te deram um veiculo usado que so faz barulho para voce ir a faculdade.~n~ ~n~");
+        case 2: strcat(mode_desc, "Voce alugou seu proprio cantinho e tem um emprego de meio periodo desde a epoca de escola. Sua fiel lambreta te acompanha, e lenta, mas raramenta te deixa na mao.~n~ ~n~");
+        case 3: strcat(mode_desc, "Voce ja esta no final da vida e se aposentou, sem muitas obrigacoes. Tem um dinheiro guardado, mas gasta horrores com remedios. Se apegou demais ao seu veiculo para pensar em trocar por um novo.~n~ ~n~");
+
+        default: strcat(mode_desc, "null");
+    }
+    
+    if (!isnull(mode_desc)) {
+        strcat(mode_desc, VSL_GetStatsModeRegisterCharacterModes(index));
+    }
+    return mode_desc;
+}
+
+VSL_GetStatsModeRegisterCharacterModes(index) {
+
+    new
+        mode_stats[30];
+
+    switch (index) {
+
+        case 0: strcat(mode_stats, "LEVEL 1~n~EXP: NORMAL");
+        case 1: strcat(mode_stats, "LEVEL 4~n~EXP: -20% EM PAYDAY");
+        case 2: strcat(mode_stats, "LEVEL 2~n~EXP: -15% EM PAYDAY");
+        case 3: strcat(mode_stats, "LEVEL 10~n~EXP: NENHUM");
+
+        default: strcat(mode_stats, "null");
+    }
+    return mode_stats;
 }

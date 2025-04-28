@@ -17,7 +17,7 @@ enum e_player_notification_data {
 new gPlayerNotificationData[MAX_PLAYERS][MAX_PLAYER_NOTIFICATIONS][e_player_notification_data];
 
 //=-=-=-=-=-=-=-=-=-=-=[Timer's]=-=-=-=-=-=-=-=-=-=-=//
-timer TimerPlayerDestroyNotification[5000](playerid, index) {
+timer TimerPlayerDestroyNotification[2000](playerid, index) {
 
     VSL_DestroyTextdrawPlayerNotifyId(playerid, gPlayerNotificationData[playerid][index][e_notification_index]);
     resetPlayerNotificationData(playerid, index);

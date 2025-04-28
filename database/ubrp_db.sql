@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
     `password` VARCHAR(60) NOT NULL,
     `email` VARCHAR(50) NOT NULL,
     `birth_date` VARCHAR(10),
-    `genre` ENUM('F', 'M', 'NB'),
+    `gender` ENUM('F', 'M', 'NB'),
     `admin` TINYINT,
     `register_date` VARCHAR(10) NOT NULL,
     `last_login` VARCHAR(10),
