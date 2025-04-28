@@ -1,5 +1,5 @@
 //=-=-=-=-=-=-=-=-=-=-=[Command's]=-=-=-=-=-=-=-=-=-=-=//
-YCMD:heli(playerid, params[], help) 
+YCMD:sultan(playerid, params[], help) 
 {
     new
         Float:pos_x,
@@ -8,7 +8,38 @@ YCMD:heli(playerid, params[], help)
     
     GetPlayerPos(playerid, pos_x, pos_y, pos_z);
 
-    CreateVehicle(411, pos_x, pos_y, pos_z + 5, 0.0, 1, 1, -1);
+    CreateVehicle(560, pos_x, pos_y, pos_z + 5, 0.0, 0, 0, -1);
+    return 1;
+}
+
+YCMD:sultan1(playerid, params[], help) 
+{
+    new
+        Float:pos_x,
+        Float:pos_y,
+        Float:pos_z;
+    
+    GetPlayerPos(playerid, pos_x, pos_y, pos_z);
+
+    CreateVehicle(477, pos_x, pos_y, pos_z + 5, 0.0, 0, 0, -1);
+    return 1;
+}
+
+YCMD:dia(playerid, params[], help) 
+{
+    SetWorldTime(12);
+    return 1;
+}
+
+YCMD:noite(playerid, params[], help) 
+{
+    SetWorldTime(20);
+    return 1;
+}
+
+YCMD:noite1(playerid, params[], help) 
+{
+    SetWorldTime(0);
     return 1;
 }
 

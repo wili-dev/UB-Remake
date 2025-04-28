@@ -111,8 +111,8 @@ SQL_LoadPlayerAccount(playerid, accountid) {
             SetPlayerLogged(playerid, true);
             SetCharacterSpawned(playerid, true);
 
-            // SetSpawnInfo(playerid, NO_TEAM, 292, 1456.1946, -1449.6780, 883.8258, 0.0);
-            SetSpawnInfo(playerid, NO_TEAM, 292, 0.0, 0.0, 10.0, 0.0);
+            SetSpawnInfo(playerid, NO_TEAM, 292, 0, 0, 0, 0.0);
+            // SetSpawnInfo(playerid, NO_TEAM, 292, 375.3465, -175.5020, 1030.6801, 90.0);
             TogglePlayerSpectating(playerid, false);
         }
     }

@@ -1,3 +1,6 @@
+CREATE DATABASE IF NOT EXISTS `ub_db` DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+use ub_db;
+
 CREATE TABLE IF NOT EXISTS `accounts` (
 
 	`id` INT AUTO_INCREMENT,
@@ -12,5 +15,4 @@ CREATE TABLE IF NOT EXISTS `accounts` (
     `last_ip` VARCHAR(16) NOT NULL,
 
     PRIMARY KEY (`id`)
-
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci AUTO_INCREMENT = 1 ;

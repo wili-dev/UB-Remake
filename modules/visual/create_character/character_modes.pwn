@@ -32,6 +32,8 @@ hook OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid) {
 
             SHARED_DestroyTextdrawLoginBackground(playerid);
             VSL_DestroyTextdrawsModeCharacterModes(playerid);
+            // SetSpawnInfo(playerid, NO_TEAM, 292, 375.3465, -175.5020, 1030.6801, 90.0);
+            SetSpawnInfo(playerid, NO_TEAM, 292, 0, 0, 0, 90.0);
             TogglePlayerSpectating(playerid, false);
             SpawnPlayer(playerid);
         }

@@ -51,6 +51,7 @@
 #include "../modules/visual/create_character/character_modes.pwn"
 
 // # Objects #
+#include "../modules/objects/library/library.pwn"
 #include "../modules/objects/centralApartments/apartmentsLS.pwn"
 
 //#include "../modules/objects/praia.pwn"
